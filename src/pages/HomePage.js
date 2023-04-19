@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Alert, Box, Container, Stack } from "@mui/material";
 
 import MovieList from "../components/MovieList";
+import MovieSearch from "../components/MovieSearch";
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
@@ -50,6 +51,17 @@ function HomePage() {
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
       <Stack sx={{ flexGrow: 1 }}>
+        <FormProvider methods={methods}>
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", sm: "row" }}
+            alignItems={{ sm: "center" }}
+            justifyContent="space-between"
+            mb={2}
+          >
+            <MovieSearch />
+          </Stack>
+        </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
           {loading ? (
             <LoadingScreen />
@@ -111,12 +123,14 @@ function applyFilter(movies, filters) {
       return product.price > 75;
     });
   }
+  */
   if (filters.searchQuery) {
-    filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().includes(filters.searchQuery.toLowerCase())
+    filteredMovies = movies.filter((movie) =>
+      movie.original_title
+        .toLowerCase()
+        .includes(filters.searchQuery.toLowerCase())
     );
   }
-  */
 
   return filteredMovies;
 }
