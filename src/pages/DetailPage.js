@@ -20,18 +20,19 @@ import LoadingScreen from "../components/LoadingScreen";
 import { Alert } from "@mui/material";
 
 function DetailPage() {
-  const [product, setProduct] = useState(null);
+  const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const params = useParams();
 
   useEffect(() => {
     if (params.id) {
-      const getProduct = async () => {
+      const getMovie = async () => {
         setLoading(true);
         try {
-          const res = await apiService.get(`/products/${params.id}`);
-          setProduct(res.data);
+          //edit the code here to get movie
+          const res = await apiService.get(`/movies/${params.id}`);
+          setMovie(res.data);
           setError("");
         } catch (error) {
           console.log(error);
@@ -39,7 +40,7 @@ function DetailPage() {
         }
         setLoading(false);
       };
-      getProduct();
+      getMovie();
     }
   }, [params]);
 
@@ -49,7 +50,7 @@ function DetailPage() {
         <Link underline="hover" color="inherit" component={RouterLink} to="/">
           CoderStore
         </Link>
-        <Typography color="text.primary">{product?.name}</Typography>
+        <Typography color="text.primary">{movie?.original_title}</Typography>
       </Breadcrumbs>
       <Box sx={{ position: "relative", height: 1 }}>
         {loading ? (
@@ -60,7 +61,7 @@ function DetailPage() {
               <Alert severity="error">{error}</Alert>
             ) : (
               <>
-                {product && (
+                {movie && (
                   <Card>
                     <Grid container>
                       <Grid item xs={12} md={6}>
@@ -78,75 +79,32 @@ function DetailPage() {
                                 width: 1,
                                 height: 1,
                               }}
-                              src={product.cover}
-                              alt="product"
+                              src={
+                                "https://image.tmdb.org/t/p/w500/" +
+                                movie.backdrop_path
+                              }
+                              alt="movie"
                             />
                           </Box>
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            mt: 2,
-                            mb: 1,
-                            display: "block",
-                            textTransform: "uppercase",
-                            color:
-                              product.status === "sale"
-                                ? "error.main"
-                                : "info.main",
-                          }}
-                        >
-                          {product.status}
-                        </Typography>
                         <Typography variant="h5" paragraph>
-                          {product.name}
+                          {movie.original_title}
                         </Typography>
-                        <Stack
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                          sx={{ mb: 2 }}
-                        >
-                          <Rating
-                            value={product.totalRating}
-                            precision={0.1}
-                            readOnly
-                          />
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "text.secondary" }}
-                          >
-                            ({product.totalReview} reviews)
-                          </Typography>
-                        </Stack>
-                        <Typography variant="h4" sx={{ mb: 3 }}>
-                          <Box
-                            component="span"
-                            sx={{
-                              color: "text.disabled",
-                              textDecoration: "line-through",
-                            }}
-                          >
-                            {product.priceSale && fCurrency(product.priceSale)}
-                          </Box>
-                          &nbsp;{fCurrency(product.price)}
-                        </Typography>
-
                         <Divider sx={{ borderStyle: "dashed" }} />
                         <Box>
                           <ReactMarkdown
                             rehypePlugins={[rehypeRaw]}
-                            children={product.description}
+                            children={movie.overview}
                           />
                         </Box>
                       </Grid>
                     </Grid>
                   </Card>
                 )}
-                {!product && (
-                  <Typography variant="h6">404 Product not found</Typography>
+                {!movie && (
+                  <Typography variant="h6">404 Movie not found</Typography>
                 )}
               </>
             )}

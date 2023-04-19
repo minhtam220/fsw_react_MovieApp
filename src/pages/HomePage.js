@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Box, Container, Stack } from "@mui/material";
-import ProductFilter from "../components/ProductFilter";
-import ProductSearch from "../components/ProductSearch";
-import ProductSort from "../components/ProductSort";
-import ProductList from "../components/ProductList";
+
+import MovieList from "../components/MovieList";
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
@@ -11,7 +9,7 @@ import orderBy from "lodash/orderBy";
 import LoadingScreen from "../components/LoadingScreen";
 
 function HomePage() {
-  const [products, setProducts] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -27,18 +25,18 @@ function HomePage() {
   });
   const { watch, reset } = methods;
   const filters = watch();
-  const filterProducts = applyFilter(products, filters);
+  const filterMovies = applyFilter(movies, filters);
 
   const handleReset = () => {
     reset();
   };
 
   useEffect(() => {
-    const getProducts = async () => {
+    const getMovies = async () => {
       setLoading(true);
       try {
-        const res = await apiService.get("/products");
-        setProducts(res.data);
+        const res = await apiService.get("/movies");
+        setMovies(res.data);
         setError("");
       } catch (error) {
         console.log(error);
@@ -46,29 +44,12 @@ function HomePage() {
       }
       setLoading(false);
     };
-    getProducts();
+    getMovies();
   }, []);
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
-      <Stack>
-        <FormProvider methods={methods}>
-          <ProductFilter resetFilter={handleReset} />
-        </FormProvider>
-      </Stack>
       <Stack sx={{ flexGrow: 1 }}>
-        <FormProvider methods={methods}>
-          <Stack
-            spacing={2}
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ sm: "center" }}
-            justifyContent="space-between"
-            mb={2}
-          >
-            <ProductSearch />
-            <ProductSort />
-          </Stack>
-        </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
           {loading ? (
             <LoadingScreen />
@@ -77,7 +58,7 @@ function HomePage() {
               {error ? (
                 <Alert severity="error">{error}</Alert>
               ) : (
-                <ProductList products={filterProducts} />
+                <MovieList movies={filterMovies} />
               )}
             </>
           )}
@@ -87,13 +68,14 @@ function HomePage() {
   );
 }
 
-function applyFilter(products, filters) {
+function applyFilter(movies, filters) {
   const { sortBy } = filters;
-  let filteredProducts = products;
+  let filteredMovies = movies;
 
   // SORT BY
+  /*
   if (sortBy === "featured") {
-    filteredProducts = orderBy(products, ["sold"], ["desc"]);
+    filteredMovies = orderBy(movies, ["sold"], ["desc"]);
   }
   if (sortBy === "newest") {
     filteredProducts = orderBy(products, ["createdAt"], ["desc"]);
@@ -104,8 +86,10 @@ function applyFilter(products, filters) {
   if (sortBy === "priceAsc") {
     filteredProducts = orderBy(products, ["price"], ["asc"]);
   }
+  */
 
   // FILTER PRODUCTS
+  /*
   if (filters.gender.length > 0) {
     filteredProducts = products.filter((product) =>
       filters.gender.includes(product.gender)
@@ -132,7 +116,9 @@ function applyFilter(products, filters) {
       product.name.toLowerCase().includes(filters.searchQuery.toLowerCase())
     );
   }
-  return filteredProducts;
+  */
+
+  return filteredMovies;
 }
 
 export default HomePage;
