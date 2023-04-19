@@ -10,7 +10,7 @@
 
 ## Users can see filter UI and can filter movies by genres
 
-## Users can see search UI and can search movies in the database by keyword
+## Users can see search UI and can search movies in the database by keyword -> done
 
 ## Users can see the website is responsive for the minimum of Desktop, iPhone, and Tablet
 

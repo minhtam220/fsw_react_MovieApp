@@ -3,6 +3,7 @@ import { Alert, Box, Container, Stack } from "@mui/material";
 
 import MovieList from "../components/MovieList";
 import MovieSearch from "../components/MovieSearch";
+import MovieFilter from "../components/MovieFilter";
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
 import apiService from "../app/apiService";
@@ -10,14 +11,13 @@ import orderBy from "lodash/orderBy";
 import LoadingScreen from "../components/LoadingScreen";
 
 function HomePage() {
+  const [genres, setGenres] = useState([]);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const defaultValues = {
-    gender: [],
-    category: "All",
-    priceRange: "",
+    genre: [],
     sortBy: "featured",
     searchQuery: "",
   };
@@ -31,6 +31,22 @@ function HomePage() {
   const handleReset = () => {
     reset();
   };
+
+  useEffect(() => {
+    const getGenres = async () => {
+      setLoading(true);
+      try {
+        const res = await apiService.get("/genres");
+        setGenres(res.data);
+        setError("");
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      }
+      setLoading(false);
+    };
+    getGenres();
+  }, []);
 
   useEffect(() => {
     const getMovies = async () => {
@@ -50,6 +66,11 @@ function HomePage() {
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+      <Stack>
+        <FormProvider methods={methods}>
+          <MovieFilter genres={genres} resetFilter={handleReset} />
+        </FormProvider>
+      </Stack>
       <Stack sx={{ flexGrow: 1 }}>
         <FormProvider methods={methods}>
           <Stack
@@ -100,13 +121,16 @@ function applyFilter(movies, filters) {
   }
   */
 
-  // FILTER PRODUCTS
-  /*
-  if (filters.gender.length > 0) {
-    filteredProducts = products.filter((product) =>
-      filters.gender.includes(product.gender)
+  // FILTER MOVIES
+  if (filters.genre) {
+    filteredMovies = movies.filter((movie) =>
+      movie.genre_ids.includes(parseInt(filters.genre))
     );
+
+    console.log(filteredMovies);
   }
+
+  /*
   if (filters.category !== "All") {
     filteredProducts = products.filter(
       (product) => product.category === filters.category
