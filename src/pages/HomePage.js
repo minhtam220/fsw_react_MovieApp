@@ -36,8 +36,10 @@ function HomePage() {
     const getGenres = async () => {
       setLoading(true);
       try {
-        const res = await apiService.get("/genres");
-        setGenres(res.data);
+        const res = await apiService.get(
+          "/genre/movie/list?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
+        );
+        setGenres(res.data["genres"]);
         setError("");
       } catch (error) {
         console.log(error);
@@ -52,8 +54,11 @@ function HomePage() {
     const getMovies = async () => {
       setLoading(true);
       try {
-        const res = await apiService.get("/movies");
-        setMovies(res.data);
+        const res = await apiService.get(
+          "/movie/upcoming?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
+        );
+        console.log(res.data["results"]);
+        setMovies(res.data["results"]);
         setError("");
       } catch (error) {
         console.log(error);
@@ -126,8 +131,6 @@ function applyFilter(movies, filters) {
     filteredMovies = movies.filter((movie) =>
       movie.genre_ids.includes(parseInt(filters.genre))
     );
-
-    console.log(filteredMovies);
   }
 
   /*

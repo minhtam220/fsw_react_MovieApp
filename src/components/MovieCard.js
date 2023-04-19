@@ -10,7 +10,7 @@ import { fCurrency } from "../utils";
 function MovieCard({ movie }) {
   const navigate = useNavigate();
   return (
-    <Card onClick={() => navigate(`/movies/${movie.id}`)}>
+    <Card onClick={() => navigate(`/movie/${movie.id}`)}>
       <CardActionArea>
         <CardMedia
           component="img"
