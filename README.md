@@ -22,10 +22,10 @@ There is an endpoint to make this happen; it is quite challenging, however. So w
 
 ## login page:
 
-- design 5 square boxes:
-  -- two types: locked and no locked.
-  -- click on no locked and go to home page.
-  -- click on locked, enter the 4 digit passcode and go to home page.
+-- design 5 square boxes -> done
+-- two types: locked and no locked.
+-- click on no locked and go to home page.
+-- click on locked, enter the 4 digit passcode and go to home page.
 
 ## home page:
 
