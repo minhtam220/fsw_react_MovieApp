@@ -2,7 +2,7 @@ import { Button, Stack, Typography, Box, Avatar } from "@mui/material";
 import React from "react";
 import LockIcon from "@mui/icons-material/Lock";
 
-export default function LoginAvatar({ username, isLocked, imageUrl }) {
+export default function LoginAvatar({ username, passcode, imageUrl }) {
   return (
     <>
       <Box
@@ -27,7 +27,7 @@ export default function LoginAvatar({ username, isLocked, imageUrl }) {
           }}
         ></Avatar>
         <Typography textAlign={"center"}>{username}</Typography>
-        {isLocked ? <LockIcon></LockIcon> : ""}
+        {passcode ? <LockIcon></LockIcon> : ""}
       </Box>
     </>
   );

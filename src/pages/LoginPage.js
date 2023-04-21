@@ -16,12 +16,12 @@ const defaultValues = {
   username: "",
 };
 
-const avatars = [
-  { username: "Ha", isLocked: 0, imgageUrl: "/img/blue.jpg" },
-  { username: "Tam", isLocked: 1, imgageUrl: "/img/blueangry.jpg" },
-  { username: "Duong", isLocked: 0, imgageUrl: "/img/green.jpg" },
-  { username: "Thu", isLocked: 0, imgageUrl: "/img/navi.jpg" },
-  { username: "Lien", isLocked: 0, imgageUrl: "/img/violet.jpg" },
+export const avatars = [
+  { username: "Ha", passcode: null, imageUrl: "/img/blue.jpg" },
+  { username: "Tam", passcode: "1234", imageUrl: "/img/blueangry.jpg" },
+  { username: "Duong", passcode: "9999", imageUrl: "/img/green.jpg" },
+  { username: "Thu", passcode: null, imageUrl: "/img/navi.jpg" },
+  { username: "Lien", passcode: null, imageUrl: "/img/violet.jpg" },
 ];
 
 /*
@@ -48,6 +48,8 @@ function LoginPage() {
   });
   const { handleSubmit } = methods;
 
+  function handleClick() {}
+
   const onSubmit = async (data) => {
     console.log(data);
     let from = location.state?.from?.pathname || "/";
@@ -59,40 +61,29 @@ function LoginPage() {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3} sx={{ minWidth: "350px" }}>
-        <Typography variant="h4" textAlign="center">
-          Who's watching
-        </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+    <Stack spacing={3} sx={{ minWidth: "350px" }}>
+      <Typography variant="h4" textAlign="center">
+        Who's watching
+      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+        {avatars.map((avatar) => (
           <LoginAvatar
-            username={"Ha"}
-            isLocked={0}
-            imageUrl={"/img/blue.jpg"}
+            username={avatar["username"]}
+            passcode={avatar["passcode"]}
+            imageUrl={avatar["imageUrl"]}
+            onClick={
+              avatar["passcode"]
+                ? () => {
+                    console.log("Enter passcode");
+                  }
+                : () => {
+                    console.log("Logining passcode");
+                  }
+            }
           ></LoginAvatar>
-          <LoginAvatar
-            username={"Tam"}
-            isLocked={1}
-            imageUrl={"/img/blueangry.jpg"}
-          ></LoginAvatar>
-          <LoginAvatar
-            username={"Duong"}
-            isLocked={0}
-            imageUrl={"/img/green.jpg"}
-          ></LoginAvatar>
-          <LoginAvatar
-            username={"Thu"}
-            isLocked={0}
-            imageUrl={"/img/navi.jpg"}
-          ></LoginAvatar>
-          <LoginAvatar
-            username={"Lien"}
-            isLocked={0}
-            imageUrl={"/img/violet.jpg"}
-          ></LoginAvatar>
-        </Box>
-      </Stack>
-    </FormProvider>
+        ))}
+      </Box>
+    </Stack>
   );
 }
 
