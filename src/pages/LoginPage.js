@@ -1,4 +1,4 @@
-import { Button, Stack, Typography, Box } from "@mui/material";
+import { Button, Stack, Typography, Box, Avatar } from "@mui/material";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FormProvider, FTextField } from "../form";
@@ -6,7 +6,8 @@ import useAuth from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import redAvatar from "../img/redAvatar.png";
+import LoginAvatar from "../components/LoginAvatar";
+import { Login } from "@mui/icons-material";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -15,13 +16,26 @@ const defaultValues = {
   username: "",
 };
 
+const avatars = [
+  { username: "Ha", isLocked: 0, imgageUrl: "/img/blue.jpg" },
+  { username: "Tam", isLocked: 1, imgageUrl: "/img/blueangry.jpg" },
+  { username: "Duong", isLocked: 0, imgageUrl: "/img/green.jpg" },
+  { username: "Thu", isLocked: 0, imgageUrl: "/img/navi.jpg" },
+  { username: "Lien", isLocked: 0, imgageUrl: "/img/violet.jpg" },
+];
+
+/*
 const commonStyles = {
   bgcolor: "black", //"background.paper",
   m: 1,
   borderColor: "text.primary",
   width: "5rem",
   height: "5rem",
-};
+  "&:hover": {
+    borderColor: "white",
+    border: 3,
+  },
+};*/
 
 function LoginPage() {
   let navigate = useNavigate();
@@ -35,6 +49,7 @@ function LoginPage() {
   const { handleSubmit } = methods;
 
   const onSubmit = async (data) => {
+    console.log(data);
     let from = location.state?.from?.pathname || "/";
     let username = data.username;
 
@@ -49,70 +64,32 @@ function LoginPage() {
         <Typography variant="h4" textAlign="center">
           Who's watching
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            name="username"
-            type="submit"
-            variant="contained"
-            sx={{
-              ...commonStyles,
-              border: 1,
-              backgroundColor: "blue",
-              textAlign: "center",
-            }}
-          >
-            Ha
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              ...commonStyles,
-              border: 1,
-              backgroundColor: "red",
-              textAlign: "center",
-            }}
-          >
-            Tam
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              ...commonStyles,
-              border: 1,
-              backgroundColor: "violet",
-              textAlign: "center",
-            }}
-          >
-            Thu
-          </Button>
-
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              ...commonStyles,
-              border: 1,
-              backgroundColor: "orange",
-              textAlign: "center",
-            }}
-          >
-            Duong
-          </Button>
-
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              ...commonStyles,
-              border: 1,
-              backgroundColor: "green",
-              textAlign: "center",
-            }}
-          >
-            Lien
-          </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <LoginAvatar
+            username={"Ha"}
+            isLocked={0}
+            imageUrl={"/img/blue.jpg"}
+          ></LoginAvatar>
+          <LoginAvatar
+            username={"Tam"}
+            isLocked={1}
+            imageUrl={"/img/blueangry.jpg"}
+          ></LoginAvatar>
+          <LoginAvatar
+            username={"Duong"}
+            isLocked={0}
+            imageUrl={"/img/green.jpg"}
+          ></LoginAvatar>
+          <LoginAvatar
+            username={"Thu"}
+            isLocked={0}
+            imageUrl={"/img/navi.jpg"}
+          ></LoginAvatar>
+          <LoginAvatar
+            username={"Lien"}
+            isLocked={0}
+            imageUrl={"/img/violet.jpg"}
+          ></LoginAvatar>
         </Box>
       </Stack>
     </FormProvider>
