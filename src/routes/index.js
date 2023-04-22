@@ -5,12 +5,18 @@ import MainLayout from "../layouts/MainLayout";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
+import TvPage from "../pages/TvPage";
+import MoviePage from "../pages/MoviePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
 
 function Router() {
   return (
     <Routes>
+      <Route element={<BlankLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
       <Route
         path="/"
         element={
@@ -19,13 +25,17 @@ function Router() {
           </AuthRequire>
         }
       >
-        <Route index element={<HomePage />} />
+        <Route
+          path="home"
+          element={
+            <AuthRequire>
+              <HomePage />
+            </AuthRequire>
+          }
+        />
         <Route path="movies/:id" element={<DetailPage />} />
-      </Route>
-
-      <Route element={<BlankLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="tv" element={<TvPage />} />
+        <Route path="movie" element={<MoviePage />} />
       </Route>
     </Routes>
   );

@@ -11,6 +11,7 @@ function AuthRequire({ children }) {
   }
 
   if (!isAuthenticated) {
+    console.log(isAuthenticated);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

@@ -42,6 +42,7 @@ function LoginPage() {
   let location = useLocation();
   let auth = useAuth();
 
+  /*
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
@@ -51,6 +52,7 @@ function LoginPage() {
   function handleClick() {}
 
   const onSubmit = async (data) => {
+    
     console.log(data);
     let from = location.state?.from?.pathname || "/";
     let username = data.username;
@@ -58,7 +60,19 @@ function LoginPage() {
     auth.login(username, () => {
       navigate(from, { replace: true });
     });
-  };
+  };*/
+
+  function handleClick(username, passcode) {
+    if (passcode) {
+      console.log("Passcode required");
+    } else {
+      console.log("No passcode required");
+      let from = location.state?.from?.pathname || "/home";
+      auth.login(username, () => {
+        navigate(from);
+      });
+    }
+  }
 
   return (
     <Stack spacing={3} sx={{ minWidth: "350px" }}>
@@ -68,18 +82,11 @@ function LoginPage() {
       <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
         {avatars.map((avatar) => (
           <LoginAvatar
+            key={avatar["username"]}
             username={avatar["username"]}
             passcode={avatar["passcode"]}
             imageUrl={avatar["imageUrl"]}
-            onClick={
-              avatar["passcode"]
-                ? () => {
-                    console.log("Enter passcode");
-                  }
-                : () => {
-                    console.log("Logining passcode");
-                  }
-            }
+            handleClick={handleClick}
           ></LoginAvatar>
         ))}
       </Box>

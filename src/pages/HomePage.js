@@ -57,7 +57,7 @@ function HomePage() {
         const res = await apiService.get(
           "/movie/upcoming?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
         );
-        console.log(res.data["results"]);
+        //console.log(res.data["results"]);
         setMovies(res.data["results"]);
         setError("");
       } catch (error) {
