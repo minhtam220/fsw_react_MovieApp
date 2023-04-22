@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import LoginAvatar from "../components/LoginAvatar";
 import { Login } from "@mui/icons-material";
+import { getAvatars } from "../data";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -16,13 +17,7 @@ const defaultValues = {
   username: "",
 };
 
-export const avatars = [
-  { username: "Ha", passcode: null, imageUrl: "/img/blue.jpg" },
-  { username: "Tam", passcode: "1234", imageUrl: "/img/blueangry.jpg" },
-  { username: "Duong", passcode: "9999", imageUrl: "/img/green.jpg" },
-  { username: "Thu", passcode: null, imageUrl: "/img/navi.jpg" },
-  { username: "Lien", passcode: null, imageUrl: "/img/violet.jpg" },
-];
+const avatars = getAvatars();
 
 /*
 const commonStyles = {
@@ -65,6 +60,9 @@ function LoginPage() {
   function handleClick(username, passcode) {
     if (passcode) {
       console.log("Passcode required");
+      window.localStorage.setItem("username", username);
+      let from = location.state?.from?.pathname || "/loginmodal";
+      navigate(from);
     } else {
       console.log("No passcode required");
       let from = location.state?.from?.pathname || "/home";

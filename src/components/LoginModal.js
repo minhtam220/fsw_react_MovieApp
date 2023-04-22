@@ -1,117 +1,75 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
+import { makeStyles } from "@mui/styles";
+import useAuth from "../hooks/useAuth";
+import { getPasscode } from "../data";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: theme.spacing(3),
+  },
+  inputField: {
+    width: 200,
+    marginBottom: theme.spacing(2),
+  },
+  submitButton: {
+    backgroundColor: "#e50914",
+    color: "#fff",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#d4000f",
+    },
+  },
+}));
 
 export default function LoginModal() {
-  const { login } = useContext(AuthContext);
+  let navigate = useNavigate();
+  let location = useLocation();
+  let auth = useAuth();
 
-  const [modalOpen, setModalopen] = useState(false);
-
+  const classes = useStyles();
   const [passcode, setPasscode] = useState("");
-  const handlePasscodeChange = (event) => {
-    setPasscode(event.target.value);
-  };
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const handleLogin = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-
-    login();
-    navigate(-1);
-  };
-
-  // eslint-disable-next-line
-  useEffect(() => {
-    if (location.pathname === "/login") {
-      setModalopen(true);
+    // Handle passcode submission
+    let username = window.localStorage.getItem("username");
+    if (passcode === getPasscode(username)) {
+      let from = location.state?.from?.pathname || "/home";
+      auth.login(username, () => {
+        navigate(from);
+      });
     } else {
-      setModalopen(false);
+      console.log("Wrong passcode");
     }
-  }, [location.pathname]);
+  };
 
   return (
-    <>
-      <Modal
-        open={modalOpen}
-        onClose={() => {
-          navigate(-1);
+    <form className={classes.formContainer} onSubmit={handleSubmit}>
+      <TextField
+        label="Enter your 4-digit code"
+        type="password"
+        InputProps={{
+          inputProps: { min: 0, max: 9999, maxLength: 4 },
+          inputMode: "numeric",
         }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        variant="outlined"
+        className={classes.inputField}
+        value={passcode}
+        onChange={(event) => setPasscode(event.target.value)}
+        required
+      />
+      <Button
+        variant="contained"
+        className={classes.submitButton}
+        type="submit"
       >
-        <Box sx={style}>
-          <Box
-            sx={{
-              //marginTop: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              borderRadius: "10px",
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Log in
-            </Typography>
-            <Box component="form" validate sx={{ mt: 1 }}>
-              <TextField
-                type="number"
-                variant="outlined"
-                margin="normal"
-                inputProps={{ maxLength: 1 }}
-                value={passcode[0] || ""}
-                onChange={handlePasscodeChange}
-              />
-              <TextField
-                type="number"
-                variant="outlined"
-                margin="normal"
-                inputProps={{ maxLength: 1 }}
-                value={passcode[1] || ""}
-                onChange={handlePasscodeChange}
-              />
-              <TextField
-                type="number"
-                variant="outlined"
-                margin="normal"
-                inputProps={{ maxLength: 1 }}
-                value={passcode[2] || ""}
-                onChange={handlePasscodeChange}
-              />
-              <TextField
-                type="number"
-                variant="outlined"
-                margin="normal"
-                inputProps={{ maxLength: 1 }}
-                value={passcode[3] || ""}
-                onChange={handlePasscodeChange}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleLogin}
-              >
-                Log In
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
-    </>
+        Submit
+      </Button>
+    </form>
   );
 }

@@ -5,6 +5,7 @@ import MainLayout from "../layouts/MainLayout";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
+import LoginModal from "../components/LoginModal";
 import TvPage from "../pages/TvPage";
 import MoviePage from "../pages/MoviePage";
 import NotFoundPage from "../pages/NotFoundPage";
@@ -15,6 +16,7 @@ function Router() {
     <Routes>
       <Route element={<BlankLayout />}>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/loginmodal" element={<LoginModal />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route
