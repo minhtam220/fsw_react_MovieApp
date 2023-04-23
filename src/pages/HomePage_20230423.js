@@ -77,9 +77,25 @@ function HomePage() {
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+      <Stack>
+        <FormProvider methods={methods}>
+          <MovieFilter genres={genres} resetFilter={handleReset} />
+        </FormProvider>
+      </Stack>
       <Stack sx={{ flexGrow: 1 }}>
+        <FormProvider methods={methods}>
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", sm: "row" }}
+            alignItems={{ sm: "center" }}
+            justifyContent="space-between"
+            mb={2}
+          >
+            <MovieSearch />
+          </Stack>
+        </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
-          Home Page
+          <Simple />
           {loading ? (
             <LoadingScreen />
           ) : (

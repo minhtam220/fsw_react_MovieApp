@@ -39,7 +39,7 @@ export default function LoginModal() {
     // Handle passcode submission
     let username = window.localStorage.getItem("username");
     if (passcode === getPasscode(username)) {
-      let from = location.state?.from?.pathname || "/home";
+      let from = location.state?.from?.pathname || "/login";
       auth.login(username, () => {
         navigate(from);
       });

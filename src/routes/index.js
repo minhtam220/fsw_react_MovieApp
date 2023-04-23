@@ -27,17 +27,10 @@ function Router() {
           </AuthRequire>
         }
       >
-        <Route
-          path="home"
-          element={
-            <AuthRequire>
-              <HomePage />
-            </AuthRequire>
-          }
-        />
-        <Route path="movies/:id" element={<DetailPage />} />
+        <Route path="home" element={<HomePage />} />
         <Route path="tv" element={<TvPage />} />
         <Route path="movie" element={<MoviePage />} />
+        <Route path="movies/:id" element={<DetailPage />} />
       </Route>
     </Routes>
   );
