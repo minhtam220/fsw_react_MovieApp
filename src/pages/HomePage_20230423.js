@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
+//materials
 import { Alert, Box, Container, Stack } from "@mui/material";
-
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import useFormControl from "@mui/material";
+//components
 import MovieList from "../components/MovieList";
 import MovieSearch from "../components/MovieSearch";
 import MovieFilter from "../components/MovieFilter";
-import { FormProvider } from "../form";
-import { useForm } from "react-hook-form";
-import apiService from "../app/apiService";
-import orderBy from "lodash/orderBy";
+import HeroSection from "../components/HeroSection";
 import LoadingScreen from "../components/LoadingScreen";
 import NavigationBar from "../components/NavigationBar";
 import SlideShow from "../components/SlideShow";
 import Simple from "../components/Simple";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import HeroSection from "../components/HeroSection";
+
+import { FormProvider } from "../form";
+import { useForm } from "react-hook-form";
+import apiService from "../app/apiService";
+import orderBy from "lodash/orderBy";
 
 function HomePage() {
   const [genres, setGenres] = useState([]);
@@ -31,6 +34,7 @@ function HomePage() {
   const methods = useForm({
     defaultValues,
   });
+
   const { watch, reset } = methods;
   const filters = watch();
   const filterMovies = applyFilter(movies, filters);

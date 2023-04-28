@@ -8,7 +8,7 @@ function MainLayout() {
   return (
     <Stack sx={{ minHeight: "100vh" }}>
       <MainHeader />
-      <HeroSection></HeroSection>
+
       <Outlet />
 
       <Box sx={{ flexGrow: 1 }} />

@@ -3,28 +3,68 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import { CardActionArea, Stack, CardActions } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { fCurrency } from "../utils";
+import { useState } from "react";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  cardWrapper: {
+    overflow: "hidden",
+    transition: "transform 0.3s",
+    "&:hover .card-content": {
+      transform: "translateY(100%)",
+    },
+    "&:hover .card-media": {
+      transform: "scale(2)",
+    },
+  },
+  cardMedia: {
+    transition: "transform 0.3s",
+  },
+  cardContent: {
+    transform: "translateY(100%)",
+    transition: "transform 0.3s",
+  },
+});
 
 function MovieCard({ movie }) {
   const navigate = useNavigate();
+
+  const classes = useStyles();
+  const [hovered, setHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+  };
+
   return (
-    <Card onClick={() => navigate(`/movie/${movie.id}`)}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="400"
-          image={"https://image.tmdb.org/t/p/w500/" + movie.poster_path}
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="body1" component="div" noWrap>
-            {movie.original_title}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <div
+      className={classes.cardWrapper + (hovered ? " hovered" : "")}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Card onClick={() => navigate(`/movie/detail/${movie.id}`)}>
+        <CardActionArea>
+          <CardMedia
+            className={`${classes.cardMedia} card-media`}
+            component="img"
+            image={"https://image.tmdb.org/t/p/w200/" + movie.backdrop_path}
+            alt="green iguana"
+          />
+          <CardContent className={`${classes.cardContent} card-content`}>
+            <Typography gutterBottom variant="body1" component="div" noWrap>
+              {movie.original_title}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </div>
   );
 }
 

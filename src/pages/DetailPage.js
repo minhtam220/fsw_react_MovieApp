@@ -18,20 +18,44 @@ import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
 import { Alert } from "@mui/material";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
+
+const queryClient = new QueryClient();
 
 function DetailPage() {
   const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const params = useParams();
 
+  const {
+    res: detailMovieData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["detailMovie"],
+    queryFn: () => apiGet(`/movie/${params.id}`),
+    onSuccess: (res) => {
+      setMovie(res.data);
+    },
+  });
+
+  const apiGet = (param) => {
+    return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
+  };
+
+  /*
   useEffect(() => {
     if (params.id) {
       const getMovie = async () => {
         setLoading(true);
         try {
           //edit the code here to get movie
-          const res = await apiService.get(`/movies/${params.id}`);
+          const res = await apiService.get(`/movie/${params.id}`);
           setMovie(res.data);
           setError("");
         } catch (error) {
@@ -43,17 +67,18 @@ function DetailPage() {
       getMovie();
     }
   }, [params]);
+*/
 
   return (
     <Container sx={{ my: 3 }}>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
         <Link underline="hover" color="inherit" component={RouterLink} to="/">
-          CoderStore
+          Home
         </Link>
         <Typography color="text.primary">{movie?.original_title}</Typography>
       </Breadcrumbs>
       <Box sx={{ position: "relative", height: 1 }}>
-        {loading ? (
+        {isLoading ? (
           <LoadingScreen />
         ) : (
           <>

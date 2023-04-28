@@ -30,11 +30,11 @@ There is an endpoint to make this happen; it is quite challenging, however. So w
 ## home page:
 
 - design the navigation:
-  -- logo/home/TV shows/Movies
+  -- logo/home/TV shows/Movies -> done
   -- search
   -- account
 - design the hero session.
-  -- auto play video
+  -- auto play video -> done
 - design the row:
   -- hover card
   -- click and go to movie page.
