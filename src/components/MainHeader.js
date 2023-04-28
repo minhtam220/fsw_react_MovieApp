@@ -33,57 +33,63 @@ function MainHeader() {
   const { watch, reset } = methods;
 
   return (
-    <Box>
-      <AppBar position="static">
-        <Toolbar
-          variant="dense"
+    <AppBar position="static">
+      <Toolbar
+        variant="dense"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            alignContent: "center",
+            alignItems: "center",
+            gap: 2,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-            }}
+          <Link
+            to="/home"
+            style={{ textDecoration: "none", color: "white", m: "10px" }}
           >
-            <Link
-              to="/home"
-              style={{ textDecoration: "none", color: "white", m: "10px" }}
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
             >
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <Logo />
-              </IconButton>
-            </Link>
-          </Box>
+              <Logo />
+            </IconButton>
+          </Link>
+        </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <FormProvider methods={methods}>
-              <Stack
-                spacing={2}
-                direction={{ xs: "column", sm: "row" }}
-                alignItems={{ sm: "center" }}
-                justifyContent="space-between"
-              >
-                <MovieSearch />
-              </Stack>
-            </FormProvider>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <FormProvider methods={methods}>
+            <Stack
+              spacing={2}
+              direction={{ xs: "column", sm: "row" }}
+              alignItems={{ sm: "center" }}
+              justifyContent="space-between"
+            >
+              <MovieSearch />
+            </Stack>
+          </FormProvider>
+        </Box>
 
-            <Typography variant="h6" color="inherit" component="div">
-              Welcome {user?.username}!
-            </Typography>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography variant="h6" color="inherit" component="div">
+            Welcome {user?.username}!
+          </Typography>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
 

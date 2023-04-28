@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { PlayArrow } from "@mui/icons-material";
 
+/*
 const VideoContainer = styled(Box)({
   position: "absolute",
   top: 0,
@@ -10,11 +11,19 @@ const VideoContainer = styled(Box)({
   height: "100vh",
   width: "100vw",
   overflow: "hidden",
+ 
+});
+*/
+
+const VideoContainer = styled(Box)({
+  height: "60vh",
+  width: "100%",
+  overflow: "hidden",
   zIndex: -1,
 });
 
 const Video = styled("video")({
-  height: "100%",
+  height: "60vh",
   width: "100%",
   objectFit: "cover",
 });
@@ -33,18 +42,13 @@ const HeroContent = styled(Box)({
 
 function HeroSection({ video }) {
   return (
-    <Box sx={{ position: "relative" }}>
+    <div>
       <VideoContainer>
         <Video autoPlay muted loop>
           <source src={process.env.PUBLIC_URL + video.url} type="video/mp4" />
         </Video>
       </VideoContainer>
-      <HeroContent>
-        <Typography variant="h1" component="h1">
-          {video.title}
-        </Typography>
-      </HeroContent>
-    </Box>
+    </div>
   );
 }
 

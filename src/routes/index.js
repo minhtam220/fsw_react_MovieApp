@@ -17,14 +17,7 @@ function Router() {
         <Route path="/loginmodal" element={<LoginModal />}></Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
-      <Route
-        path="/"
-        element={
-          <AuthRequire>
-            <MainLayout />
-          </AuthRequire>
-        }
-      >
+      <Route path="/" element={<HomePage />}>
         <Route path="home" element={<HomePage />} />
         <Route path="detail/:id" element={<DetailPage />} />
         <Route path="*" element={<NotFoundPage />} />

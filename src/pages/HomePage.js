@@ -4,6 +4,7 @@ import { Alert, Box, Container, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 //components
+import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
 import MovieSearch from "../components/MovieSearch";
 import MovieFilter from "../components/MovieFilter";
@@ -51,7 +52,9 @@ const heroVideos = [
 ];
 
 function HomePage() {
+  const debugMode = 1;
   //randomly select a hero video
+
   let randomIndex = Math.floor(Math.random() * heroVideos.length);
   let heroVideo = heroVideos[randomIndex];
 
@@ -142,8 +145,20 @@ function HomePage() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HeroSection video={heroVideo}></HeroSection>
-      <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+      <Stack>
+        <Box sx={{ maxWidth: 1920 }}>
+          <MainHeader />
+        </Box>
+        <Box sx={{ maxWidth: 1920 }}>
+          <HeroSection video={heroVideo} />
+        </Box>
+      </Stack>
+      <Container
+        sx={{
+          display: "flex",
+          minHeight: "100vh",
+        }}
+      >
         <Stack sx={{ flexGrow: 1 }}>
           <Box sx={{ position: "relative", height: 1 }}>
             {upcomingMoviesLoading ? (
@@ -155,36 +170,6 @@ function HomePage() {
                 ) : (
                   <>
                     <MovieList listName={"Upcoming"} movies={upcomingMovies} />
-                  </>
-                )}
-              </>
-            )}
-          </Box>
-          <Box sx={{ position: "relative", height: 1 }}>
-            {topRatedMoviesLoading ? (
-              <LoadingScreen />
-            ) : (
-              <>
-                {topRatedMoviesError ? (
-                  <Alert severity="error">{topRatedMoviesError}</Alert>
-                ) : (
-                  <>
-                    <MovieList listName={"Top Rated"} movies={topRatedMovies} />
-                  </>
-                )}
-              </>
-            )}
-          </Box>
-          <Box sx={{ position: "relative", height: 1 }}>
-            {popularMoviesLoading ? (
-              <LoadingScreen />
-            ) : (
-              <>
-                {popularMoviesError ? (
-                  <Alert severity="error">{popularMoviesError}</Alert>
-                ) : (
-                  <>
-                    <MovieList listName={"Popular"} movies={popularMovies} />
                   </>
                 )}
               </>
