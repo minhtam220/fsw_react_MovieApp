@@ -63,29 +63,6 @@ function MainHeader() {
                 <Logo />
               </IconButton>
             </Link>
-
-            <Link to="/tv" style={{ textDecoration: "none", color: "white" }}>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ display: { xs: "none", sm: "block" } }}
-              >
-                TV Shows
-              </Typography>
-            </Link>
-
-            <Link
-              to="/movie"
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ display: { xs: "none", sm: "block" } }}
-              >
-                Movies
-              </Typography>
-            </Link>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

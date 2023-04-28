@@ -31,11 +31,29 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
-function HomePage() {
-  const params = useParams();
+//videos for hero section
+const heroVideos = [
+  {
+    id: 0,
+    title: "Breaking Bad",
+    url: "/videos/Breaking Bad by Balenciaga.mp4",
+  },
+  {
+    id: 1,
+    title: "Harry Potter",
+    url: "/videos/Harry Potter by Balenciaga 3.mp4",
+  },
+  {
+    id: 2,
+    title: "Lord of the Rings",
+    url: "/videos/Lord of the Rings by Balenciaga.mp4",
+  },
+];
 
-  console.log(params["pageid"]);
-  //const [genres, setGenres] = useState([]);
+function HomePage() {
+  //randomly select a hero video
+  let randomIndex = Math.floor(Math.random() * heroVideos.length);
+  let heroVideo = heroVideos[randomIndex];
 
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -124,7 +142,7 @@ function HomePage() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HeroSection title={params["pageid"]}></HeroSection>
+      <HeroSection video={heroVideo}></HeroSection>
       <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
         <Stack sx={{ flexGrow: 1 }}>
           <Box sx={{ position: "relative", height: 1 }}>

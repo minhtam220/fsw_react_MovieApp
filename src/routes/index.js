@@ -6,8 +6,6 @@ import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import LoginModal from "../components/LoginModal";
-import TvPage from "../pages/TvPage";
-import MoviePage from "../pages/MoviePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
 
@@ -15,8 +13,8 @@ function Router() {
   return (
     <Routes>
       <Route element={<BlankLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/loginmodal" element={<LoginModal />} />
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/loginmodal" element={<LoginModal />}></Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route
@@ -27,8 +25,9 @@ function Router() {
           </AuthRequire>
         }
       >
-        <Route path=":pageid" element={<HomePage />} />
-        <Route path="movie/detail/:id" element={<DetailPage />} />
+        <Route path="home" element={<HomePage />} />
+        <Route path="detail/:id" element={<DetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

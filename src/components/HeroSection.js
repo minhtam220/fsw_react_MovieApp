@@ -31,23 +31,17 @@ const HeroContent = styled(Box)({
   color: "#fff",
 });
 
-function HeroSection({ title }) {
+function HeroSection({ video }) {
   return (
     <Box sx={{ position: "relative" }}>
       <VideoContainer>
         <Video autoPlay muted loop>
-          <source
-            src={
-              process.env.PUBLIC_URL +
-              "/videos/Harry Potter by Balenciaga 3.mp4"
-            }
-            type="video/mp4"
-          />
+          <source src={process.env.PUBLIC_URL + video.url} type="video/mp4" />
         </Video>
       </VideoContainer>
       <HeroContent>
         <Typography variant="h1" component="h1">
-          {title}
+          {video.title}
         </Typography>
       </HeroContent>
     </Box>
