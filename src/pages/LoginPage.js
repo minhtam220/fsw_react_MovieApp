@@ -9,6 +9,8 @@ import * as Yup from "yup";
 import LoginAvatar from "../components/LoginAvatar";
 import { Login } from "@mui/icons-material";
 import { getAvatars } from "../data";
+import { styled } from "@mui/material/styles";
+import Logo from "../components/Logo";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -18,6 +20,13 @@ const defaultValues = {
 };
 
 const avatars = getAvatars();
+
+const HeaderStyle = styled("header")(({ theme }) => ({
+  top: "10%",
+  left: "50%",
+  transform: "translateX(-50%)",
+  position: "absolute",
+}));
 
 /*
 const commonStyles = {
@@ -72,22 +81,32 @@ function LoginPage() {
     }
   }
 
+  if (window.localStorage.getItem("username")) {
+    let from = location.state?.from?.pathname || "/";
+    navigate(from, { replace: true });
+  }
+
   return (
-    <Stack spacing={3} sx={{ minWidth: "350px" }}>
-      <Typography variant="h4" textAlign="center">
-        Who's watching
-      </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-        {avatars.map((avatar) => (
-          <LoginAvatar
-            key={avatar["username"]}
-            username={avatar["username"]}
-            passcode={avatar["passcode"]}
-            imageUrl={avatar["imageUrl"]}
-            handleClick={handleClick}
-          ></LoginAvatar>
-        ))}
-      </Box>
+    <Stack minHeight="100vh" justifyContent="center" alignItems="center">
+      <HeaderStyle>
+        <Logo sx={{ width: 50, height: 50 }} />
+      </HeaderStyle>
+      <Stack spacing={3} sx={{ minWidth: "350px" }}>
+        <Typography variant="h4" textAlign="center">
+          Who's watching
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          {avatars.map((avatar) => (
+            <LoginAvatar
+              key={avatar["username"]}
+              username={avatar["username"]}
+              passcode={avatar["passcode"]}
+              imageUrl={avatar["imageUrl"]}
+              handleClick={handleClick}
+            ></LoginAvatar>
+          ))}
+        </Box>
+      </Stack>
     </Stack>
   );
 }

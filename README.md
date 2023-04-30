@@ -49,3 +49,17 @@ There is an endpoint to make this happen; it is quite challenging, however. So w
 
 - design the movie page
 - design the info
+
+### version 30/04/2023
+
+code - làm trang home/tv/movie chung một trang -> done
+improve - bỏ phần tv
+code - làm chức năng random select movie cho hero section -> done
+bug - hero video title và content không khớp nhau + bị chậm
+design - chỉnh giao diện cho hero section ngay với movie -> done
+bug - phần typo của hero section bị đẩy xuống dưới
+design - chỉnh search cho ra màu trắng phần text -> done
+bug - phần rìa border bị lem ra
+code - làm trang search page: submit form thì ra page, không có hero section
+bug - login ko có passcode okie, login bằng passcode bị fail
+code - chỉnh search để khi bấm enter thì ra page search

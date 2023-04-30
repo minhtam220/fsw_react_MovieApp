@@ -39,9 +39,9 @@ export default function LoginModal() {
     // Handle passcode submission
     let username = window.localStorage.getItem("username");
     if (passcode === getPasscode(username)) {
-      let from = location.state?.from?.pathname || "/login";
+      let from = location.state?.from?.pathname || "/home";
       auth.login(username, () => {
-        navigate(from);
+        navigate(-1);
       });
     } else {
       console.log("Wrong passcode");

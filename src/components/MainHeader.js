@@ -13,24 +13,40 @@ import { InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MovieList from "../components/MovieList";
 import MovieFilter from "../components/MovieFilter";
+import Button from "@mui/material/Button";
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
 import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function MainHeader() {
+  let navigate = useNavigate();
+  let location = useLocation();
+
   const { user } = useAuth();
 
+  let auth = useAuth();
+
+  function handleClick() {
+    let from = location.state?.from?.pathname || "/login";
+    auth.logout(() => {
+      navigate(from);
+    });
+  }
+
   const defaultValues = {
-    genre: [],
-    sortBy: "featured",
     searchQuery: "",
   };
 
   const methods = useForm({
     defaultValues,
   });
+
   const { watch, reset } = methods;
+  const filters = watch();
+
+  console.log(filters);
 
   return (
     <AppBar position="static">
@@ -87,6 +103,20 @@ function MainHeader() {
           <Typography variant="h6" color="inherit" component="div">
             Welcome {user?.username}!
           </Typography>
+        </Box>
+
+        <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          {user ? (
+            <>
+              <Link>
+                <Button sx={{ color: "#fff" }} onClick={handleClick}>
+                  Logout
+                </Button>
+              </Link>
+            </>
+          ) : (
+            ""
+          )}
         </Box>
       </Toolbar>
     </AppBar>

@@ -102,9 +102,8 @@ function HomePage() {
     return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
   };
 
+  /*
   const defaultValues = {
-    genre: [],
-    sortBy: "featured",
     searchQuery: "",
   };
 
@@ -113,15 +112,17 @@ function HomePage() {
   });
 
   const { watch, reset } = methods;
-
-  /*
   const filters = watch();
-  const filterMovies = applyFilter(movies, filters);
-  */
+
+  console.log(filters);
+  
+
+  //const filterMovies = applyFilter(movies, filters);
 
   const handleReset = () => {
     reset();
   };
+  */
 
   /*
   useEffect(() => {

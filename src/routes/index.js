@@ -4,6 +4,7 @@ import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
+import SearchPage from "../pages/SearchPage";
 import LoginPage from "../pages/LoginPage";
 import LoginModal from "../components/LoginModal";
 import NotFoundPage from "../pages/NotFoundPage";
@@ -12,16 +13,28 @@ import AuthRequire from "./AuthRequire";
 function Router() {
   return (
     <Routes>
-      <Route element={<BlankLayout />}>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/loginmodal" element={<LoginModal />}></Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-      <Route path="/" element={<HomePage />}>
-        <Route path="home" element={<HomePage />} />
-        <Route path="detail/:id" element={<DetailPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
+      <Route
+        path="/"
+        element={
+          <AuthRequire>
+            <HomePage />
+          </AuthRequire>
+        }
+      />
+      <Route
+        path="/home"
+        element={
+          <AuthRequire>
+            <HomePage />
+          </AuthRequire>
+        }
+      />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/loginmodal" element={<LoginModal />} />
+      <Route path="/search" element={<SearchPage />} />
+      <Route path="/?searchQuery=*" element={<SearchPage />} />
+      <Route path="/detail/:id" element={<DetailPage />} />
+      <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
 }
