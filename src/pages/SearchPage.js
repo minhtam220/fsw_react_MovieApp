@@ -30,8 +30,6 @@ import {
 //routes
 import { Link as RouterLink, useParams } from "react-router-dom";
 
-const queryClient = new QueryClient();
-
 function SearchPage() {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
 
@@ -69,7 +67,7 @@ function SearchPage() {
   */
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Stack>
         <Box sx={{ maxWidth: 1920 }}>
           <MainHeader />
@@ -100,7 +98,7 @@ function SearchPage() {
           </Box>
         </Stack>
       </Container>
-    </QueryClientProvider>
+    </>
   );
 }
 

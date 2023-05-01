@@ -54,49 +54,30 @@ const heroVideos = [
 function HomePage() {
   const debugMode = 1;
   //randomly select a hero video
-
   let randomIndex = Math.floor(Math.random() * heroVideos.length);
   let heroVideo = heroVideos[randomIndex];
 
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]);
-
+  //loading upcoming movie
   const {
-    res: upcomingMoviesData,
+    data: upcomingMoviesData,
     isLoading: upcomingMoviesLoading,
     error: upcomingMoviesError,
   } = useQuery({
     queryKey: ["upcomingMovies"],
     queryFn: () => apiGet("/movie/upcoming"),
-    onSuccess: (res) => {
-      setUpcomingMovies(res.data["results"]);
-    },
   });
 
+  //loading top rated movie
+  /*
   const {
-    res: topRatedMoviesData,
+    data: topRatedMoviesData,
     isLoading: topRatedMoviesLoading,
     error: topRatedMoviesError,
   } = useQuery({
     queryKey: ["topRatedMovies"],
     queryFn: () => apiGet("/movie/top_rated"),
-    onSuccess: (res) => {
-      setTopRatedMovies(res.data["results"]);
-    },
   });
-
-  const {
-    res: popularMoviesData,
-    isLoading: popularMoviesLoading,
-    error: popularMoviesError,
-  } = useQuery({
-    queryKey: ["popularMovies"],
-    queryFn: () => apiGet("/movie/popular"),
-    onSuccess: (res) => {
-      setPopularMovies(res.data["results"]);
-    },
-  });
+  */
 
   const apiGet = (param) => {
     return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
@@ -122,30 +103,13 @@ function HomePage() {
   const handleReset = () => {
     reset();
   };
+
+
+
   */
 
-  /*
-  useEffect(() => {
-    const getGenres = async () => {
-      setLoading(true);
-      try {
-        const res = await apiService.get(
-          "/genre/movie/list?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
-        );
-        setGenres(res.data["genres"]);
-        setError("");
-      } catch (error) {
-        console.log(error);
-        setError(error.message);
-      }
-      setLoading(false);
-    };
-    getGenres();
-  }, []);
-*/
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Stack>
         <Box sx={{ maxWidth: 1920 }}>
           <MainHeader />
@@ -170,7 +134,10 @@ function HomePage() {
                   <Alert severity="error">{upcomingMoviesError}</Alert>
                 ) : (
                   <>
-                    <MovieList listName={"Upcoming"} movies={upcomingMovies} />
+                    <MovieList
+                      listName={"Upcoming"}
+                      movies={upcomingMoviesData.data["results"]}
+                    />
                   </>
                 )}
               </>
@@ -178,10 +145,11 @@ function HomePage() {
           </Box>
         </Stack>
       </Container>
-    </QueryClientProvider>
+    </>
   );
 }
 
+/*
 function applyFilter(movies, filters) {
   const { sortBy } = filters;
   let filteredMovies = movies;
@@ -202,14 +170,15 @@ function applyFilter(movies, filters) {
   }
   */
 
-  // FILTER MOVIES
-  if (filters.genre) {
-    filteredMovies = movies.filter((movie) =>
-      movie.genre_ids.includes(parseInt(filters.genre))
-    );
-  }
+// FILTER MOVIES
+/*
+if (filters.genre) {
+  filteredMovies = movies.filter((movie) =>
+    movie.genre_ids.includes(parseInt(filters.genre))
+  );
+}
 
-  /*
+/*
   if (filters.category !== "All") {
     filteredProducts = products.filter(
       (product) => product.category === filters.category
@@ -226,7 +195,7 @@ function applyFilter(movies, filters) {
       return product.price > 75;
     });
   }
-  */
+  
   if (filters.searchQuery) {
     filteredMovies = movies.filter((movie) =>
       movie.original_title
@@ -237,5 +206,6 @@ function applyFilter(movies, filters) {
 
   return filteredMovies;
 }
+*/
 
 export default HomePage;

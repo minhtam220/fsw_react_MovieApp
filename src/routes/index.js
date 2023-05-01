@@ -32,7 +32,6 @@ function Router() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/loginmodal" element={<LoginModal />} />
       <Route path="/search" element={<SearchPage />} />
-      <Route path="/?searchQuery=*" element={<SearchPage />} />
       <Route path="/detail/:id" element={<DetailPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
