@@ -60,7 +60,9 @@ export default function HomePage() {
   //--- code for randomly select a hero video
   let randomIndex = Math.floor(Math.random() * heroVideos.length);
   let heroVideo = heroVideos[randomIndex];
-  //--- code for randomly select a hero video
+
+  //--- code for pagination
+  let [currentPage, setCurrentPage] = useState(1);
 
   //--- code for loading upcoming movie
   const {
@@ -81,9 +83,6 @@ export default function HomePage() {
     queryKey: ["topRatedMovies"],
     queryFn: () => apiGet("/movie/top_rated"),
   });
-
-  let [currentPage, setCurrentPage] = useState(1);
-  console.log(currentPage);
 
   //--- code for loading popular movie
   const {
@@ -142,53 +141,6 @@ export default function HomePage() {
       );
     }
   };
-
-  //--- code for pagination
-  /*
-  for (var key in popularMoviesData) {
-    if (jobs.hasOwnProperty(key)) {
-      ++length;
-    }
-  }*/
-
-  //--- code for loading upcoming movie
-
-  //loading top rated movie
-  /*
-  const {
-    data: topRatedMoviesData,
-    isLoading: topRatedMoviesLoading,
-    error: topRatedMoviesError,
-  } = useQuery({
-    queryKey: ["topRatedMovies"],
-    queryFn: () => apiGet("/movie/top_rated"),
-  });
-  */
-
-  //--- code for search
-
-  /*
-  const defaultValues = {
-    searchQuery: "",
-  };
-
-  const methods = useForm({
-    defaultValues,
-  });
-
-  const { watch, reset } = methods;
-  const filters = watch();
-
-  console.log(filters);
-  
-
-  //const filterMovies = applyFilter(movies, filters);
-
-  const handleReset = () => {
-    reset();
-  };
-
-  */
 
   return (
     <>
