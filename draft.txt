@@ -30,3 +30,74 @@
            {genres.map((item, index) => (
             <MenuItem value={item.id}>{item.name}</MenuItem>
           ))}
+
+
+
+                  <Route path="home" element={<HomePage />} />
+        <Route path="tv" element={<TvPage />} />
+        <Route path="movie" element={<MoviePage />} />
+
+
+        {{params['pageid'] === 'tv' ? videos[3]:videos[0]}}></HeroSection>
+
+
+         
+      </Route>
+
+
+                <Box sx={{ position: "relative", height: 1 }}>
+            {topRatedMoviesLoading ? (
+              <LoadingScreen />
+            ) : (
+              <>
+                {topRatedMoviesError ? (
+                  <Alert severity="error">{topRatedMoviesError}</Alert>
+                ) : (
+                  <>
+                    <MovieList listName={"Top Rated"} movies={topRatedMovies} />
+                  </>
+                )}
+              </>
+            )}
+          </Box>
+          <Box sx={{ position: "relative", height: 1 }}>
+            {popularMoviesLoading ? (
+              <LoadingScreen />
+            ) : (
+              <>
+                {popularMoviesError ? (
+                  <Alert severity="error">{popularMoviesError}</Alert>
+                ) : (
+                  <>
+                    <MovieList listName={"Popular"} movies={popularMovies} />
+                  </>
+                )}
+              </>
+            )}
+          </Box>
+
+
+                <HeroContent>
+        <Typography variant="h1" component="h1">
+          {video.title}
+        </Typography>
+      </HeroContent>
+
+
+      <Routes>
+      <Route element={<BlankLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/concat" element={<LoginPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/loginmodal" element={<LoginModal />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+      <Route exact path="/home" element={<HomePage />}>
+        
+        <Route path="home" element={<HomePage />} />
+        <Route path="search" element={<SearchPage />} />
+
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="detail/:id" element={<DetailPage />} />
+      </Route>
+    </Routes>

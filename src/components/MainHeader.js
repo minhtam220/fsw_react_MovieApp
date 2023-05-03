@@ -20,7 +20,7 @@ import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+
 import { alpha, styled, CssBaseline, InputBase } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
@@ -65,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function MainHeader() {
+function MainHeader({ searchInput, handleSearchInputChange }) {
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -101,8 +101,6 @@ function MainHeader() {
     setSearch(event.target.value);
   };
   */
-
-  let [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <AppBar position="static">
@@ -156,15 +154,8 @@ function MainHeader() {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
-                value={searchParams.get("filter") || ""}
-                onChange={(event) => {
-                  let filter = event.target.value;
-                  if (filter) {
-                    setSearchParams({ filter });
-                  } else {
-                    setSearchParams({});
-                  }
-                }}
+                value={searchInput}
+                onChange={handleSearchInputChange}
               />
             </Search>
           </Box>

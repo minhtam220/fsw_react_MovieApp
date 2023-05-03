@@ -44,20 +44,15 @@ function MovieCard({ movie }) {
   };
 
   return (
-    <div
-      className={classes.cardWrapper + (hovered ? " hovered" : "")}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className={classes.cardWrapper + (hovered ? " hovered" : "")}>
       <Card onClick={() => navigate(`/movie/detail/${movie.id}`)}>
         <CardActionArea>
           <CardMedia
-            className={`${classes.cardMedia} card-media`}
             component="img"
             image={"https://image.tmdb.org/t/p/w200/" + movie.backdrop_path}
             alt="green iguana"
           />
-          <CardContent className={`${classes.cardContent} card-content`}>
+          <CardContent>
             <Typography gutterBottom variant="body1" component="div" noWrap>
               {movie.original_title}
             </Typography>

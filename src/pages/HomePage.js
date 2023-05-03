@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 //materials
 import { Alert, Box, Container, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -13,6 +14,7 @@ import NavigationBar from "../components/NavigationBar";
 import SlideShow from "../components/SlideShow";
 import Simple from "../components/Simple";
 import HeroSection from "../components/HeroSection";
+import MovieResult from "../components/MovieResult";
 //forms
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
@@ -29,6 +31,8 @@ import {
 } from "react-query";
 //routes
 import { Link as RouterLink, useParams } from "react-router-dom";
+
+import { useSearchParams } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
@@ -52,12 +56,12 @@ const heroVideos = [
 ];
 
 function HomePage() {
-  const debugMode = 1;
-  //randomly select a hero video
+  //--- code for randomly select a hero video
   let randomIndex = Math.floor(Math.random() * heroVideos.length);
   let heroVideo = heroVideos[randomIndex];
+  //--- code for randomly select a hero video
 
-  //loading upcoming movie
+  //--- code for loading upcoming movie
   const {
     data: upcomingMoviesData,
     isLoading: upcomingMoviesLoading,
@@ -66,6 +70,51 @@ function HomePage() {
     queryKey: ["upcomingMovies"],
     queryFn: () => apiGet("/movie/upcoming"),
   });
+
+  //--- code for search
+  const location = useLocation();
+  const navigate = useNavigate();
+  const {
+    data: searchedMoviesData,
+    isLoading: searchedMoviesLoading,
+    error: searchedMoviesError,
+  } = useQuery({
+    queryKey: ["searchedMovies"],
+    queryFn: () => apiGet("/search/movie", searchInput),
+  });
+
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("q", searchInput);
+    navigate(`?${searchParams.toString()}`);
+  }, [searchInput, location.search, navigate]);
+
+  const handleSearchInputChange = (event) => {
+    console.log("input: " + event.target.value);
+    setSearchInput(event.target.value);
+
+    //console.log("search Results" + searchedMoviesData.data["results"]);
+  };
+
+  const apiGet = (param, searchInput) => {
+    if (searchInput !== "") {
+      console.log("search: " + searchInput);
+      return apiService.get(
+        param +
+          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+          "&language=us" +
+          "&query=" +
+          searchInput
+      );
+    } else {
+      return apiService.get(
+        param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
+      );
+    }
+  };
+  //--- code for loading upcoming movie
 
   //loading top rated movie
   /*
@@ -79,9 +128,11 @@ function HomePage() {
   });
   */
 
-  const apiGet = (param) => {
-    return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
+  const handleSearchClick = () => {
+    // TODO: handle search action
   };
+
+  //--- code for search
 
   /*
   const defaultValues = {
@@ -104,19 +155,24 @@ function HomePage() {
     reset();
   };
 
-
-
   */
 
   return (
     <>
       <Stack>
         <Box sx={{ maxWidth: 1920 }}>
-          <MainHeader />
+          <MainHeader
+            searchInput={searchInput}
+            handleSearchInputChange={handleSearchInputChange}
+          />
         </Box>
-        <Box sx={{ maxWidth: 1920 }}>
-          <HeroSection video={heroVideo} />
-        </Box>
+        {searchInput ? (
+          <></>
+        ) : (
+          <Box sx={{ maxWidth: 1920 }}>
+            <HeroSection video={heroVideo} />
+          </Box>
+        )}
       </Stack>
       <Container
         sx={{
@@ -125,24 +181,45 @@ function HomePage() {
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
-          <Box sx={{ position: "relative", height: 1 }}>
-            {upcomingMoviesLoading ? (
-              <LoadingScreen />
-            ) : (
-              <>
-                {upcomingMoviesError ? (
-                  <Alert severity="error">{upcomingMoviesError}</Alert>
-                ) : (
-                  <>
-                    <MovieList
-                      listName={"Upcoming"}
-                      movies={upcomingMoviesData.data["results"]}
-                    />
-                  </>
-                )}
-              </>
-            )}
-          </Box>
+          {searchInput ? (
+            <Box sx={{ position: "relative", height: 1 }}>
+              {searchedMoviesLoading ? (
+                <LoadingScreen />
+              ) : (
+                <>
+                  {searchedMoviesError ? (
+                    <Alert severity="error">{searchedMoviesError}</Alert>
+                  ) : (
+                    <>
+                      <MovieResult
+                        listName={"Search Results"}
+                        movies={searchedMoviesData.data["results"]}
+                      />
+                    </>
+                  )}
+                </>
+              )}
+            </Box>
+          ) : (
+            <Box sx={{ position: "relative", height: 1 }}>
+              {upcomingMoviesLoading ? (
+                <LoadingScreen />
+              ) : (
+                <>
+                  {upcomingMoviesError ? (
+                    <Alert severity="error">{upcomingMoviesError}</Alert>
+                  ) : (
+                    <>
+                      <MovieList
+                        listName={"Upcoming"}
+                        movies={upcomingMoviesData.data["results"]}
+                      />
+                    </>
+                  )}
+                </>
+              )}
+            </Box>
+          )}
         </Stack>
       </Container>
     </>

@@ -1,9 +1,17 @@
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Stack,
+} from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../hooks/useAuth";
 import { getPasscode } from "../data";
+import Logo from "../components/Logo";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -48,27 +56,38 @@ export default function LoginModal() {
   };
 
   return (
-    <form className={classes.formContainer} onSubmit={handleSubmit}>
-      <TextField
-        label="Enter your 4-digit code"
-        type="password"
-        InputProps={{
-          inputProps: { min: 0, max: 9999, maxLength: 4 },
-          inputMode: "numeric",
-        }}
-        variant="outlined"
-        className={classes.inputField}
-        value={passcode}
-        onChange={(event) => setPasscode(event.target.value)}
-        required
-      />
-      <Button
-        variant="contained"
-        className={classes.submitButton}
-        type="submit"
-      >
-        Submit
-      </Button>
-    </form>
+    <Stack
+      spacing={3}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minWidth: "350px",
+      }}
+    >
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+        <form className={classes.formContainer} onSubmit={handleSubmit}>
+          <TextField
+            label="Enter your 4-digit code"
+            type="password"
+            InputProps={{
+              inputProps: { min: 0, max: 9999, maxLength: 4 },
+              inputMode: "numeric",
+            }}
+            variant="outlined"
+            className={classes.inputField}
+            value={passcode}
+            onChange={(event) => setPasscode(event.target.value)}
+            required
+          />
+          <Button
+            variant="contained"
+            className={classes.submitButton}
+            type="submit"
+          >
+            Submit
+          </Button>
+        </form>
+      </Box>
+    </Stack>
   );
 }
