@@ -33,6 +33,7 @@ import {
 import { Link as RouterLink, useParams } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 const queryClient = new QueryClient();
 
@@ -74,29 +75,27 @@ function HomePage() {
   //--- code for search
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
   const {
     data: searchedMoviesData,
     isLoading: searchedMoviesLoading,
     error: searchedMoviesError,
   } = useQuery({
-    queryKey: ["searchedMovies"],
-    queryFn: () => apiGet("/search/movie", searchInput),
+    queryKey: ["searchedMovies", searchTerm],
+    queryFn: () => apiGet("/search/movie", searchTerm),
   });
 
-  const [searchInput, setSearchInput] = useState("");
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set("q", searchInput);
-    navigate(`?${searchParams.toString()}`);
-  }, [searchInput, location.search, navigate]);
-
   const handleSearchInputChange = (event) => {
-    console.log("input: " + event.target.value);
     setSearchInput(event.target.value);
 
-    //console.log("search Results" + searchedMoviesData.data["results"]);
+    handleSearch();
   };
+
+  const handleSearch = debounce(() => {
+    setSearchTerm(searchInput);
+  }, 500);
 
   const apiGet = (param, searchInput) => {
     if (searchInput !== "") {
@@ -127,10 +126,6 @@ function HomePage() {
     queryFn: () => apiGet("/movie/top_rated"),
   });
   */
-
-  const handleSearchClick = () => {
-    // TODO: handle search action
-  };
 
   //--- code for search
 
@@ -191,7 +186,7 @@ function HomePage() {
                     <Alert severity="error">{searchedMoviesError}</Alert>
                   ) : (
                     <>
-                      <MovieResult
+                      <MovieList
                         listName={"Search Results"}
                         movies={searchedMoviesData.data["results"]}
                       />

@@ -65,7 +65,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function MainHeader({ searchInput, handleSearchInputChange }) {
+function MainHeader({
+  searchInput,
+  handleSearchInputChange,
+  handleSearchInputSubmit,
+}) {
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -156,6 +160,7 @@ function MainHeader({ searchInput, handleSearchInputChange }) {
                 inputProps={{ "aria-label": "search" }}
                 value={searchInput}
                 onChange={handleSearchInputChange}
+                onSubmit={handleSearchInputSubmit}
               />
             </Search>
           </Box>
