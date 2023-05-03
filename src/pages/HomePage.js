@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 //materials
 import { Alert, Box, Container, Stack } from "@mui/material";
@@ -14,7 +14,7 @@ import NavigationBar from "../components/NavigationBar";
 import SlideShow from "../components/SlideShow";
 import Simple from "../components/Simple";
 import HeroSection from "../components/HeroSection";
-import MovieResult from "../components/MovieResult";
+import MoviePagination from "../components/MoviePagination";
 //forms
 import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
@@ -56,7 +56,7 @@ const heroVideos = [
   },
 ];
 
-function HomePage() {
+export default function HomePage() {
   //--- code for randomly select a hero video
   let randomIndex = Math.floor(Math.random() * heroVideos.length);
   let heroVideo = heroVideos[randomIndex];
@@ -70,6 +70,29 @@ function HomePage() {
   } = useQuery({
     queryKey: ["upcomingMovies"],
     queryFn: () => apiGet("/movie/upcoming"),
+  });
+
+  //--- code for loading top rated movie
+  const {
+    data: topRatedMoviesData,
+    isLoading: topRatedMoviesLoading,
+    error: topRatedMoviesError,
+  } = useQuery({
+    queryKey: ["topRatedMovies"],
+    queryFn: () => apiGet("/movie/top_rated"),
+  });
+
+  let [currentPage, setCurrentPage] = useState(1);
+  console.log(currentPage);
+
+  //--- code for loading popular movie
+  const {
+    data: popularMoviesData,
+    isLoading: popularMoviesLoading,
+    error: popularMoviesError,
+  } = useQuery({
+    queryKey: ["popularMovies", currentPage],
+    queryFn: () => apiGet("/movie/popular", "", currentPage),
   });
 
   //--- code for search
@@ -89,7 +112,6 @@ function HomePage() {
 
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
-
     handleSearch();
   };
 
@@ -97,9 +119,8 @@ function HomePage() {
     setSearchTerm(searchInput);
   }, 500);
 
-  const apiGet = (param, searchInput) => {
+  const apiGet = (param, searchInput, currentPage) => {
     if (searchInput !== "") {
-      console.log("search: " + searchInput);
       return apiService.get(
         param +
           "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
@@ -107,12 +128,29 @@ function HomePage() {
           "&query=" +
           searchInput
       );
+    } else if (currentPage !== 1) {
+      return apiService.get(
+        param +
+          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+          "&language=us" +
+          "&page=" +
+          currentPage
+      );
     } else {
       return apiService.get(
         param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
       );
     }
   };
+
+  //--- code for pagination
+  /*
+  for (var key in popularMoviesData) {
+    if (jobs.hasOwnProperty(key)) {
+      ++length;
+    }
+  }*/
+
   //--- code for loading upcoming movie
 
   //loading top rated movie
@@ -196,24 +234,73 @@ function HomePage() {
               )}
             </Box>
           ) : (
-            <Box sx={{ position: "relative", height: 1 }}>
-              {upcomingMoviesLoading ? (
-                <LoadingScreen />
-              ) : (
-                <>
-                  {upcomingMoviesError ? (
-                    <Alert severity="error">{upcomingMoviesError}</Alert>
-                  ) : (
-                    <>
-                      <MovieList
-                        listName={"Upcoming"}
-                        movies={upcomingMoviesData.data["results"]}
-                      />
-                    </>
-                  )}
-                </>
-              )}
-            </Box>
+            <>
+              <Box sx={{ position: "relative", height: 1 }}>
+                {upcomingMoviesLoading ? (
+                  <LoadingScreen />
+                ) : (
+                  <>
+                    {upcomingMoviesError ? (
+                      <Alert severity="error">{upcomingMoviesError}</Alert>
+                    ) : (
+                      <>
+                        <MovieList
+                          listName={"Upcoming"}
+                          movies={upcomingMoviesData.data["results"].slice(
+                            0,
+                            4
+                          )}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+                {topRatedMoviesLoading ? (
+                  <LoadingScreen />
+                ) : (
+                  <>
+                    {topRatedMoviesError ? (
+                      <Alert severity="error">{topRatedMoviesError}</Alert>
+                    ) : (
+                      <>
+                        <MovieList
+                          listName={"Top Rated"}
+                          movies={topRatedMoviesData.data["results"].slice(
+                            0,
+                            4
+                          )}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+                {popularMoviesLoading ? (
+                  <LoadingScreen />
+                ) : (
+                  <>
+                    {popularMoviesError ? (
+                      <Alert severity="error">{popularMoviesError}</Alert>
+                    ) : (
+                      <>
+                        <MovieList
+                          listName={"Popular"}
+                          movies={popularMoviesData.data["results"]}
+                        />
+                        <MoviePagination
+                          pageCount={
+                            popularMoviesData
+                              ? popularMoviesData.data["total_pages"]
+                              : 1
+                          }
+                          currentPage={currentPage}
+                          setCurrentPage={setCurrentPage}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </Box>
+            </>
           )}
         </Stack>
       </Container>
@@ -279,5 +366,3 @@ if (filters.genre) {
   return filteredMovies;
 }
 */
-
-export default HomePage;
