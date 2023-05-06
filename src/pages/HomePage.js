@@ -1,60 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 //materials
-import { Alert, Box, Container, Stack } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
+import { Alert, Box, Container, Stack, Select, MenuItem } from "@mui/material";
 //components
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
-import MovieSearch from "../components/MovieSearch";
-import MovieFilter from "../components/MovieFilter";
 import LoadingScreen from "../components/LoadingScreen";
-import NavigationBar from "../components/NavigationBar";
-import SlideShow from "../components/SlideShow";
-import Simple from "../components/Simple";
 import HeroSection from "../components/HeroSection";
 import MoviePagination from "../components/MoviePagination";
-//forms
-import { FormProvider } from "../form";
-import { useForm } from "react-hook-form";
 //api
 import apiService from "../app/apiService";
-import orderBy from "lodash/orderBy";
 //query
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import { useQuery } from "react-query";
 //routes
-import { Link as RouterLink, useParams } from "react-router-dom";
-
-import { useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
-
-const queryClient = new QueryClient();
+//data
+import getGenres from "../data/genres";
+import getHeroVideos from "../data/heroVideos";
 
 //videos for hero section
-const heroVideos = [
-  {
-    id: 0,
-    title: "Breaking Bad",
-    url: "/videos/Breaking Bad by Balenciaga.mp4",
-  },
-  {
-    id: 1,
-    title: "Harry Potter",
-    url: "/videos/Harry Potter by Balenciaga 3.mp4",
-  },
-  {
-    id: 2,
-    title: "Lord of the Rings",
-    url: "/videos/Lord of the Rings by Balenciaga.mp4",
-  },
-];
+const heroVideos = getHeroVideos();
 
 export default function HomePage() {
   //--- code for randomly select a hero video
@@ -63,6 +28,22 @@ export default function HomePage() {
 
   //--- code for pagination
   let [currentPage, setCurrentPage] = useState(1);
+
+  //--- code for genres
+  let genres = getGenres();
+
+  //let genres = genresData.data["genres"];
+
+  const {
+    data: genresData,
+    isLoading: genresLoading,
+    error: genresError,
+  } = useQuery({
+    queryKey: ["genres"],
+    queryFn: () => apiGet("/genre/movie/list", "", ""),
+  });
+
+  //console.log(genresData.data["genres"]);
 
   //--- code for loading upcoming movie
   const {
@@ -74,6 +55,8 @@ export default function HomePage() {
     queryFn: () => apiGet("/movie/upcoming"),
   });
 
+  //console.log(upcomingMoviesData.data["results"]);
+
   //--- code for loading top rated movie
   const {
     data: topRatedMoviesData,
@@ -84,15 +67,45 @@ export default function HomePage() {
     queryFn: () => apiGet("/movie/top_rated"),
   });
 
-  //--- code for loading popular movie
+  //--- code for popular movie
   const {
     data: popularMoviesData,
     isLoading: popularMoviesLoading,
     error: popularMoviesError,
   } = useQuery({
-    queryKey: ["popularMovies", currentPage],
-    queryFn: () => apiGet("/movie/popular", "", currentPage),
+    queryKey: ["popularMovies"],
+    queryFn: () => apiGet("/movie/popular"),
   });
+
+  //--- code for discover movie
+  const [selectedGenre, setSelectedGenre] = useState("");
+
+  const {
+    data: discoverMoviesData,
+    isLoading: discoverMoviesLoading,
+    error: discoverMoviesError,
+  } = useQuery({
+    queryKey: ["discoverMovies", currentPage, selectedGenre],
+    queryFn: () => apiGet("/discover/movie", "", currentPage, selectedGenre),
+  });
+
+  //--- code for filter movie
+  /*
+  const [selectedGenre, setSelectedGenre] = useState("");
+
+  const handleGenreChange = (event) => {
+    setSelectedGenre(event.target.value);
+  };
+
+  const {
+    data: filteredMoviesData,
+    isLoading: filteredMoviesLoading,
+    error: filteredMoviesError,
+  } = useQuery({
+    queryKey: ["filteredMovies", selectedGenre],
+    queryFn: () => apiGet("/movie/popular", "", "", selectedGenre),
+  });
+  */
 
   //--- code for search
   const location = useLocation();
@@ -118,7 +131,26 @@ export default function HomePage() {
     setSearchTerm(searchInput);
   }, 500);
 
-  const apiGet = (param, searchInput, currentPage) => {
+  //--- code for select genre
+
+  const handleSelectedGenreChange = (event) => {
+    setSelectedGenre(event.target.value);
+    console.log(selectedGenre);
+  };
+
+  //--- code for api Get
+  /*
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const q = searchParams.get("q");
+    const sort = searchParams.get("sort");
+    console.log("Search query:", q);
+    console.log("Sort method:", sort);
+  }, []);
+  */
+
+  const apiGet = (param, searchInput, currentPage, genre) => {
+    /*
     if (searchInput !== "") {
       return apiService.get(
         param +
@@ -140,7 +172,47 @@ export default function HomePage() {
         param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
       );
     }
+    */
+
+    switch (param) {
+      case "/genre/movie/list":
+        return apiService.get(
+          param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
+        );
+      case "/movie/upcoming":
+      case "/movie/top_rated":
+      case "/movie/popular":
+        return apiService.get(
+          param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
+        );
+      case "/discover/movie":
+        return apiService.get(
+          param +
+            "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+            "&language=us" +
+            "&page=" +
+            currentPage +
+            "&with_genres=" +
+            genre
+        );
+      case "/search/movie":
+        return apiService.get(
+          param +
+            "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+            "&language=us" +
+            "&query=" +
+            searchInput
+        );
+      default:
+        break;
+    }
   };
+
+  // now do something with the data
+  //let genres = genresData.data["genres"];
+
+  // console.log(genresData.data["genres"]);
+  //console.log(upcomingMoviesData.data["results"]);
 
   return (
     <>
@@ -166,6 +238,13 @@ export default function HomePage() {
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
+          <Box sx={{ position: "relative", height: 1 }}>
+            <Select value={selectedGenre} onChange={handleSelectedGenreChange}>
+              {genres.map((item, index) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+            </Select>
+          </Box>
           {searchInput ? (
             <Box sx={{ position: "relative", height: 1 }}>
               {searchedMoviesLoading ? (
@@ -236,12 +315,28 @@ export default function HomePage() {
                       <>
                         <MovieList
                           listName={"Popular"}
-                          movies={popularMoviesData.data["results"]}
+                          movies={popularMoviesData.data["results"].slice(0, 4)}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+                {discoverMoviesLoading ? (
+                  <LoadingScreen />
+                ) : (
+                  <>
+                    {discoverMoviesError ? (
+                      <Alert severity="error">{discoverMoviesError}</Alert>
+                    ) : (
+                      <>
+                        <MovieList
+                          listName={"All Movies" + selectedGenre}
+                          movies={discoverMoviesData.data["results"]}
                         />
                         <MoviePagination
                           pageCount={
-                            popularMoviesData
-                              ? popularMoviesData.data["total_pages"]
+                            discoverMoviesData
+                              ? discoverMoviesData.data["total_pages"]
                               : 1
                           }
                           currentPage={currentPage}

@@ -1,35 +1,68 @@
-  //https://api.themoviedb.org/3/movie/upcoming?api_key=21f2bd24510391ba5a7b1c4bc9b38951
-  //https://api.themoviedb.org/3/movie/top_rated?api_key=21f2bd24510391ba5a7b1c4bc9b38951
-  //https://api.themoviedb.org/3/movie/popular?api_key=21f2bd24510391ba5a7b1c4bc9b38951
-  //https://api.themoviedb.org/3/movie/now_playing?api_key=21f2bd24510391ba5a7b1c4bc9b38951
-  //https://api.themoviedb.org/3/movie/latest?api_key=21f2bd24510391ba5a7b1c4bc9b38951
+API Samples
+Genres
+https://api.themoviedb.org/3/genre/movie/list?api_key=21f2bd24510391ba5a7b1c4bc9b38951
 
-  /*
-  {
-      listName: "upcoming",
-      listContent: [],
-    },
-    {
-      listName: "top_rated",
-      listContent: [],
-    },
-    {
-      listName: "popular",
-      listContent: [],
-    },
-    {
-      listName: "now_playing",
-      listContent: [],
-    },
-    {
-      listName: "latest",
-      listContent: [],
+Get movies
+https://api.themoviedb.org/3/movie/upcoming?api_key=21f2bd24510391ba5a7b1c4bc9b38951
+https://api.themoviedb.org/3/movie/top_rated?api_key=21f2bd24510391ba5a7b1c4bc9b38951
+https://api.themoviedb.org/3/movie/popular?api_key=21f2bd24510391ba5a7b1c4bc9b38951
+
+Get movies with pagination
+https://api.themoviedb.org/3/movie/popular?api_key=21f2bd24510391ba5a7b1c4bc9b38951&page=XXX
+
+Search movies
+https://api.themoviedb.org/3/search/movie?api_key=21f2bd24510391ba5a7b1c4bc9b38951&query=XXXX
+
+const apiGet = (param, searchInput, currentPage) => {
+
+switch(param) {
+  case "/genre/movie":
+  case "/movie/upcoming":
+  case "/movie/top_rated":
+    return apiService.get(
+        param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
+      );
+    break;
+  case "/movie/popular":
+    return apiService.get(
+        param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us" + "&page=" +
+          currentPage
+      );
+    break;
+  case "/search/movie":
+     return apiService.get(
+        param +
+          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+          "&language=us" +
+          "&query=" +
+          searchInput
+      );
+  default:
+    break;
+}
+
+    if (param === "/search/movie") {
+      return apiService.get(
+        param +
+          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+          "&language=us" +
+          "&query=" +
+          searchInput
+      );
+    } else if (currentPage !== 1) {
+      return apiService.get(
+        param +
+          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
+          "&language=us" +
+          "&page=" +
+          currentPage
+      );
+    } else {
+      return apiService.get(
+        param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
+      );
     }
-  */
-
-           {genres.map((item, index) => (
-            <MenuItem value={item.id}>{item.name}</MenuItem>
-          ))}
+  };
 
 
 
@@ -101,3 +134,5 @@
         <Route path="detail/:id" element={<DetailPage />} />
       </Route>
     </Routes>
+
+

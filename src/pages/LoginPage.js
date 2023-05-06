@@ -1,18 +1,23 @@
-import { Button, Stack, Typography, Box, Avatar } from "@mui/material";
+//react
 import React from "react";
+//react router
 import { useNavigate, useLocation } from "react-router-dom";
-import { FormProvider, FTextField } from "../form";
+//hooks
 import useAuth from "../hooks/useAuth";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+//components
 import LoginAvatar from "../components/LoginAvatar";
 import { Login } from "@mui/icons-material";
-import { getAvatars } from "../data";
+// get users data
+import { getPasscodeByUsername, getUsers } from "../data/users";
 import { styled } from "@mui/material/styles";
+import { Button, Stack, Typography, Box, Avatar } from "@mui/material";
 import Logo from "../components/Logo";
+import LoginModal from "../components/LoginModal";
+import { useState } from "react";
+import Modal from "@mui/material/Modal";
 
-const avatars = getAvatars();
+//const avatars = getAvatars();
+const users = getUsers();
 
 const HeaderStyle = styled("header")(({ theme }) => ({
   top: "10%",
@@ -21,52 +26,23 @@ const HeaderStyle = styled("header")(({ theme }) => ({
   position: "absolute",
 }));
 
-/*
-const commonStyles = {
-  bgcolor: "black", //"background.paper",
-  m: 1,
-  borderColor: "text.primary",
-  width: "5rem",
-  height: "5rem",
-  "&:hover": {
-    borderColor: "white",
-    border: 3,
-  },
-};*/
-
 function LoginPage() {
   let navigate = useNavigate();
   let location = useLocation();
   let auth = useAuth();
 
-  /*
-  const methods = useForm({
-    resolver: yupResolver(LoginSchema),
-    defaultValues,
-  });
-  const { handleSubmit } = methods;
+  const [modalOpen, setModalopen] = useState(false);
 
-  function handleClick() {}
-
-  const onSubmit = async (data) => {
-    
-    console.log(data);
-    let from = location.state?.from?.pathname || "/";
-    let username = data.username;
-
-    auth.login(username, () => {
-      navigate(from, { replace: true });
-    });
-  };*/
-
-  function handleClick(username, passcode) {
-    if (passcode) {
+  function handleClick(user) {
+    if (user["passcode"]) {
       console.log("Passcode required");
-      window.localStorage.setItem("username", username);
+      window.localStorage.setItem("username", user["username"]);
+      window.localStorage.setItem("imageUrl", user["imageUrl"]);
+      window.localStorage.setItem("list", []);
       navigate("/loginmodal");
     } else {
       console.log("No passcode required");
-      auth.login(username, () => {
+      auth.login(user["username"], () => {
         navigate("/");
       });
     }
@@ -75,6 +51,21 @@ function LoginPage() {
   if (window.localStorage.getItem("username")) {
     navigate("/");
   }
+
+  const [passcode, setPasscode] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle passcode submission
+    let username = window.localStorage.getItem("username");
+    if (passcode === getPasscodeByUsername(username)) {
+      auth.login(username, () => {
+        navigate("/");
+      });
+    } else {
+      console.log("Wrong passcode");
+    }
+  };
 
   return (
     <Stack
@@ -94,12 +85,10 @@ function LoginPage() {
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-        {avatars.map((avatar) => (
+        {users.map((user) => (
           <LoginAvatar
-            key={avatar["username"]}
-            username={avatar["username"]}
-            passcode={avatar["passcode"]}
-            imageUrl={avatar["imageUrl"]}
+            key={user["username"]}
+            user={user}
             handleClick={handleClick}
           ></LoginAvatar>
         ))}

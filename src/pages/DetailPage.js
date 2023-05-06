@@ -25,8 +25,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "react-query";
-
-const queryClient = new QueryClient();
+import { Button } from "@mui/material";
 
 function DetailPage() {
   const [movie, setMovie] = useState(null);
@@ -48,26 +47,13 @@ function DetailPage() {
     return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
   };
 
-  /*
-  useEffect(() => {
-    if (params.id) {
-      const getMovie = async () => {
-        setLoading(true);
-        try {
-          //edit the code here to get movie
-          const res = await apiService.get(`/movie/${params.id}`);
-          setMovie(res.data);
-          setError("");
-        } catch (error) {
-          console.log(error);
-          setError(error.message);
-        }
-        setLoading(false);
-      };
-      getMovie();
-    }
-  }, [params]);
-*/
+  const handleClick = (event) => {
+    event.preventDefault();
+    // Handle passcode submission
+    let currentList = window.localStorage.getItem("list");
+    currentList = { ...currentList, movie };
+    window.localStorage.setItem("list", currentList);
+  };
 
   return (
     <Container sx={{ my: 3 }}>
@@ -125,6 +111,12 @@ function DetailPage() {
                           />
                         </Box>
                       </Grid>
+                      <Button
+                        variant="contained"
+                        onClick={(event) => handleClick}
+                      >
+                        Add to List
+                      </Button>
                     </Grid>
                   </Card>
                 )}

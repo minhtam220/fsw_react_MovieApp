@@ -2,12 +2,7 @@ import { Button, Stack, Typography, Box, Avatar } from "@mui/material";
 import React from "react";
 import LockIcon from "@mui/icons-material/Lock";
 
-export default function LoginAvatar({
-  username,
-  passcode,
-  imageUrl,
-  handleClick,
-}) {
+export default function LoginAvatar({ user, handleClick }) {
   return (
     <>
       <Box
@@ -22,10 +17,10 @@ export default function LoginAvatar({
           },
         }}
       >
-        <Button style={{}} onClick={() => handleClick(username, passcode)}>
+        <Button style={{}} onClick={() => handleClick(user)}>
           <Avatar
-            alt={username}
-            src={process.env.PUBLIC_URL + imageUrl}
+            alt={user["username"]}
+            src={process.env.PUBLIC_URL + user["imageUrl"]}
             variant="square"
             sx={{
               width: "5rem",
@@ -34,8 +29,8 @@ export default function LoginAvatar({
           ></Avatar>
         </Button>
 
-        <Typography textAlign={"center"}>{username}</Typography>
-        {passcode ? <LockIcon></LockIcon> : ""}
+        <Typography textAlign={"center"}>{user["username"]}</Typography>
+        {user["passcode"] ? <LockIcon></LockIcon> : ""}
       </Box>
     </>
   );
