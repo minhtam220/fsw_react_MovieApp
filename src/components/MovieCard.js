@@ -45,7 +45,10 @@ function MovieCard({ movie }) {
 
   return (
     <div className={classes.cardWrapper + (hovered ? " hovered" : "")}>
-      <Card onClick={() => navigate(`/detail/${movie.id}`)}>
+      <Card
+        style={{ boxShadow: "none" }}
+        onClick={() => navigate(`/detail/${movie.id}`)}
+      >
         <CardActionArea>
           <CardMedia
             component="img"

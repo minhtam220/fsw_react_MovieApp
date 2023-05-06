@@ -28,7 +28,7 @@ export default function MoviePagination({
           <Pagination
             count={pageCount}
             color="primary"
-            value={currentPage}
+            page={currentPage}
             onChange={(e, value) => {
               setCurrentPage(value);
             }}
