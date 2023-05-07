@@ -40,8 +40,13 @@ export default function HomePage() {
     error: genresError,
   } = useQuery({
     queryKey: ["genres"],
-    queryFn: () => apiGet("/genre/movie/list", "", ""),
+    queryFn: () =>
+      apiService.get("/genre/movie/list", {
+        params: {},
+      }),
   });
+
+  //let genres = genresData.data["genres"];
 
   //console.log(genresData.data["genres"]);
 
@@ -52,10 +57,11 @@ export default function HomePage() {
     error: upcomingMoviesError,
   } = useQuery({
     queryKey: ["upcomingMovies"],
-    queryFn: () => apiGet("/movie/upcoming"),
+    queryFn: () =>
+      apiService.get("/movie/upcoming", {
+        params: {},
+      }),
   });
-
-  //console.log(upcomingMoviesData.data["results"]);
 
   //--- code for loading top rated movie
   const {
@@ -64,7 +70,10 @@ export default function HomePage() {
     error: topRatedMoviesError,
   } = useQuery({
     queryKey: ["topRatedMovies"],
-    queryFn: () => apiGet("/movie/top_rated"),
+    queryFn: () =>
+      apiService.get("/movie/top_rated", {
+        params: {},
+      }),
   });
 
   //--- code for popular movie
@@ -74,7 +83,10 @@ export default function HomePage() {
     error: popularMoviesError,
   } = useQuery({
     queryKey: ["popularMovies"],
-    queryFn: () => apiGet("/movie/popular"),
+    queryFn: () =>
+      apiService.get("/movie/popular", {
+        params: {},
+      }),
   });
 
   //--- code for discover movie
@@ -86,26 +98,19 @@ export default function HomePage() {
     error: discoverMoviesError,
   } = useQuery({
     queryKey: ["discoverMovies", currentPage, selectedGenre],
-    queryFn: () => apiGet("/discover/movie", "", currentPage, selectedGenre),
+    queryFn: () =>
+      apiService.get("/discover/movie", {
+        params: {
+          page: currentPage,
+          with_genres: selectedGenre,
+        },
+      }),
   });
 
-  //--- code for filter movie
-  /*
-  const [selectedGenre, setSelectedGenre] = useState("");
-
-  const handleGenreChange = (event) => {
+  //--- code for select genre
+  const handleSelectedGenreChange = (event) => {
     setSelectedGenre(event.target.value);
   };
-
-  const {
-    data: filteredMoviesData,
-    isLoading: filteredMoviesLoading,
-    error: filteredMoviesError,
-  } = useQuery({
-    queryKey: ["filteredMovies", selectedGenre],
-    queryFn: () => apiGet("/movie/popular", "", "", selectedGenre),
-  });
-  */
 
   //--- code for search
   const location = useLocation();
@@ -119,7 +124,12 @@ export default function HomePage() {
     error: searchedMoviesError,
   } = useQuery({
     queryKey: ["searchedMovies", searchTerm],
-    queryFn: () => apiGet("/search/movie", searchTerm),
+    queryFn: () =>
+      apiService.get("/search/movie", {
+        params: {
+          query: searchTerm,
+        },
+      }),
   });
 
   const handleSearchInputChange = (event) => {
@@ -130,83 +140,6 @@ export default function HomePage() {
   const handleSearch = debounce(() => {
     setSearchTerm(searchInput);
   }, 500);
-
-  //--- code for select genre
-
-  const handleSelectedGenreChange = (event) => {
-    setSelectedGenre(event.target.value);
-    console.log(selectedGenre);
-  };
-
-  //--- code for api Get
-  /*
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const q = searchParams.get("q");
-    const sort = searchParams.get("sort");
-    console.log("Search query:", q);
-    console.log("Sort method:", sort);
-  }, []);
-  */
-
-  const apiGet = (param, searchInput, currentPage, genre) => {
-    /*
-    if (searchInput !== "") {
-      return apiService.get(
-        param +
-          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
-          "&language=us" +
-          "&query=" +
-          searchInput
-      );
-    } else if (currentPage !== 1) {
-      return apiService.get(
-        param +
-          "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
-          "&language=us" +
-          "&page=" +
-          currentPage
-      );
-    } else {
-      return apiService.get(
-        param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
-      );
-    }
-    */
-
-    switch (param) {
-      case "/genre/movie/list":
-        return apiService.get(
-          param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951"
-        );
-      case "/movie/upcoming":
-      case "/movie/top_rated":
-      case "/movie/popular":
-        return apiService.get(
-          param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" + "&language=us"
-        );
-      case "/discover/movie":
-        return apiService.get(
-          param +
-            "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
-            "&language=us" +
-            "&page=" +
-            currentPage +
-            "&with_genres=" +
-            genre
-        );
-      case "/search/movie":
-        return apiService.get(
-          param +
-            "?api_key=21f2bd24510391ba5a7b1c4bc9b38951" +
-            "&language=us" +
-            "&query=" +
-            searchInput
-        );
-      default:
-        break;
-    }
-  };
 
   // now do something with the data
   //let genres = genresData.data["genres"];
@@ -238,13 +171,6 @@ export default function HomePage() {
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
-          <Box sx={{ position: "relative", height: 1 }}>
-            <Select value={selectedGenre} onChange={handleSelectedGenreChange}>
-              {genres.map((item, index) => (
-                <MenuItem value={item.id}>{item.name}</MenuItem>
-              ))}
-            </Select>
-          </Box>
           {searchInput ? (
             <Box sx={{ position: "relative", height: 1 }}>
               {searchedMoviesLoading ? (
@@ -321,6 +247,16 @@ export default function HomePage() {
                     )}
                   </>
                 )}
+              </Box>
+              <Box sx={{ position: "relative", height: 1 }}>
+                <Select
+                  value={selectedGenre}
+                  onChange={handleSelectedGenreChange}
+                >
+                  {genres.map((item, index) => (
+                    <MenuItem value={item.id}>{item.name}</MenuItem>
+                  ))}
+                </Select>
                 {discoverMoviesLoading ? (
                   <LoadingScreen />
                 ) : (
@@ -354,3 +290,62 @@ export default function HomePage() {
     </>
   );
 }
+
+/*
+function applyFilter(movies, filters) {
+  const { sortBy } = filters;
+  let filteredMovies = movies;
+
+  // SORT BY
+  /*
+  if (sortBy === "featured") {
+    filteredMovies = orderBy(movies, ["sold"], ["desc"]);
+  }
+  if (sortBy === "newest") {
+    filteredProducts = orderBy(products, ["createdAt"], ["desc"]);
+  }
+  if (sortBy === "priceDesc") {
+    filteredProducts = orderBy(products, ["price"], ["desc"]);
+  }
+  if (sortBy === "priceAsc") {
+    filteredProducts = orderBy(products, ["price"], ["asc"]);
+  }
+  */
+
+// FILTER MOVIES
+/*
+if (filters.genre) {
+  filteredMovies = movies.filter((movie) =>
+    movie.genre_ids.includes(parseInt(filters.genre))
+  );
+}
+
+/*
+  if (filters.category !== "All") {
+    filteredProducts = products.filter(
+      (product) => product.category === filters.category
+    );
+  }
+  if (filters.priceRange) {
+    filteredProducts = products.filter((product) => {
+      if (filters.priceRange === "below") {
+        return product.price < 25;
+      }
+      if (filters.priceRange === "between") {
+        return product.price >= 25 && product.price <= 75;
+      }
+      return product.price > 75;
+    });
+  }
+  
+  if (filters.searchQuery) {
+    filteredMovies = movies.filter((movie) =>
+      movie.original_title
+        .toLowerCase()
+        .includes(filters.searchQuery.toLowerCase())
+    );
+  }
+
+  return filteredMovies;
+}
+*/

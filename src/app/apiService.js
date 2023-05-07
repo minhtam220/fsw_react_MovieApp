@@ -1,8 +1,13 @@
 import axios from "axios";
 import { BASE_URL, API_KEY } from "./config";
 
+//const API_KEY = 'your_api_key';
+
 const apiService = axios.create({
   baseURL: BASE_URL,
+  params: {
+    api_key: API_KEY,
+  },
 });
 
 apiService.interceptors.request.use(
