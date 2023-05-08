@@ -10,14 +10,14 @@ import {
   Divider,
   Breadcrumbs,
   Link,
+  Alert,
+  Button,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { fCurrency } from "../utils";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
-import { Alert } from "@mui/material";
 import {
   useQuery,
   useMutation,
@@ -25,34 +25,64 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "react-query";
-import { Button } from "@mui/material";
+
+/*
+let savedMovies = localStorage.getItem("savedMovies")
+  ? JSON.parse(localStorage.getItem("savedMovies"))
+  : [];
+  */
 
 function DetailPage() {
-  const [movie, setMovie] = useState(null);
   const params = useParams();
+  const [movie, setMovie] = useState("");
+  const [isSaved, setIsSaved] = useState(false);
 
-  const {
-    res: detailMovieData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["detailMovie"],
-    queryFn: () => apiGet(`/movie/${params.id}`),
-    onSuccess: (res) => {
-      setMovie(res.data);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["detailMovie", params.id],
+    queryFn: () => apiService.get(`/movie/${params.id}`),
+    onSuccess: async (data) => {
+      setMovie(data.data);
+
+      const savedMovies = JSON.parse(
+        window.localStorage.getItem("savedMovies")
+      );
+
+      const isObjectInArray = savedMovies.some(
+        (obj) => JSON.stringify(obj) === JSON.stringify(movie)
+      );
+
+      if (isObjectInArray) {
+        setIsSaved(true);
+      } else {
+        setIsSaved(false);
+      }
     },
   });
 
-  const apiGet = (param) => {
-    return apiService.get(param + "?api_key=21f2bd24510391ba5a7b1c4bc9b38951");
-  };
+  //setMovie(detailMovieData);
 
-  const handleClick = (event) => {
-    event.preventDefault();
+  const handleClick = () => {
     // Handle passcode submission
-    let currentList = window.localStorage.getItem("list");
-    currentList = { ...currentList, movie };
-    window.localStorage.setItem("list", currentList);
+    //console.log(movie);
+    //savedMovies.push(movie);
+    //console.log(savedMovies);
+
+    if (!isSaved) {
+      //retrieve the current savedMovies from local storage as an array of objects
+      let savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
+
+      //check if savedMovies is null, and initialize to an empty array if it is
+      if (!savedMovies) {
+        savedMovies = [];
+      }
+
+      //push the movie to it
+      savedMovies.push(movie);
+      //save the array as string in local storage
+      window.localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+
+      setIsSaved(true);
+    }
   };
 
   return (
@@ -61,7 +91,7 @@ function DetailPage() {
         <Link underline="hover" color="inherit" component={RouterLink} to="/">
           Home
         </Link>
-        <Typography color="text.primary">{movie?.original_title}</Typography>
+        <Typography color="text.primary">{movie.original_title}</Typography>
       </Breadcrumbs>
       <Box sx={{ position: "relative", height: 1 }}>
         {isLoading ? (
@@ -111,11 +141,9 @@ function DetailPage() {
                           />
                         </Box>
                       </Grid>
-                      <Button
-                        variant="contained"
-                        onClick={(event) => handleClick}
-                      >
-                        Add to List
+                      {}
+                      <Button variant="contained" onClick={handleClick}>
+                        {isSaved ? "Remove from List" : "Add to List"}
                       </Button>
                     </Grid>
                   </Card>

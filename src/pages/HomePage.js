@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 //materials
-import { Alert, Box, Container, Stack, Select, MenuItem } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Container,
+  Stack,
+  Select,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 //components
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
@@ -20,6 +28,90 @@ import getHeroVideos from "../data/heroVideos";
 
 //videos for hero section
 const heroVideos = getHeroVideos();
+
+/*
+let savedMovies = [
+  {
+    adult: false,
+    backdrop_path: "/hZkgoQYus5vegHoetLkCJzb17zJ.jpg",
+    belongs_to_collection: null,
+    budget: 63000000,
+    genres: [
+      { id: 18, name: "Drama" },
+      { id: 53, name: "Thriller" },
+      { id: 35, name: "Comedy" },
+    ],
+    homepage: "http://www.foxmovies.com/movies/fight-club",
+    id: 550,
+    imdb_id: "tt0137523",
+    original_language: "en",
+    original_title: "Fight Club",
+    overview:
+      'A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground "fight clubs" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.',
+    popularity: 62.74,
+    poster_path: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+    production_companies: [
+      {
+        id: 508,
+        logo_path: "/7cxRWzi4LsVm4Utfpr1hfARNurT.png",
+        name: "Regency Enterprises",
+        origin_country: "US",
+      },
+      {
+        id: 711,
+        logo_path: "/tEiIH5QesdheJmDAqQwvtN60727.png",
+        name: "Fox 2000 Pictures",
+        origin_country: "US",
+      },
+      {
+        id: 20555,
+        logo_path: "/hD8yEGUBlHOcfHYbujp71vD8gZp.png",
+        name: "Taurus Film",
+        origin_country: "DE",
+      },
+      {
+        id: 54051,
+        logo_path: null,
+        name: "Atman Entertainment",
+        origin_country: "",
+      },
+      {
+        id: 54052,
+        logo_path: null,
+        name: "Knickerbocker Films",
+        origin_country: "US",
+      },
+      {
+        id: 4700,
+        logo_path: "/A32wmjrs9Psf4zw0uaixF0GXfxq.png",
+        name: "The Linson Company",
+        origin_country: "US",
+      },
+      {
+        id: 25,
+        logo_path: "/qZCc1lty5FzX30aOCVRBLzaVmcp.png",
+        name: "20th Century Fox",
+        origin_country: "US",
+      },
+    ],
+    production_countries: [
+      { iso_3166_1: "US", name: "United States of America" },
+    ],
+    release_date: "1999-10-15",
+    revenue: 100853753,
+    runtime: 139,
+    spoken_languages: [
+      { english_name: "English", iso_639_1: "en", name: "English" },
+    ],
+    status: "Released",
+    tagline: "Mischief. Mayhem. Soap.",
+    title: "Fight Club",
+    video: false,
+    vote_average: 8.433,
+    vote_count: 26341,
+  },
+];
+*/
 
 export default function HomePage() {
   //--- code for randomly select a hero video
@@ -113,8 +205,6 @@ export default function HomePage() {
   };
 
   //--- code for search
-  const location = useLocation();
-  const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -145,7 +235,9 @@ export default function HomePage() {
   //let genres = genresData.data["genres"];
 
   // console.log(genresData.data["genres"]);
-  //console.log(upcomingMoviesData.data["results"]);
+  //console.log("upcomingMoviesData " + upcomingMoviesData.data["results"]);
+
+  //console.log("savedMovies " + savedMovies);
 
   return (
     <>
@@ -283,6 +375,23 @@ export default function HomePage() {
                   </>
                 )}
               </Box>
+              <Box sx={{ position: "relative", height: 1 }}>
+                <Typography>
+                  Saved List:
+                  {JSON.parse(window.localStorage.getItem("savedMovies"))
+                    ? "OK" +
+                      JSON.parse(window.localStorage.getItem("savedMovies"))[0][
+                        "adult"
+                      ]
+                    : "NOT OK"}
+                </Typography>
+                <MovieList
+                  listName={"Saved Movies"}
+                  movies={JSON.parse(
+                    window.localStorage.getItem("savedMovies")
+                  )}
+                />
+              </Box>
             </>
           )}
         </Stack>
@@ -290,62 +399,3 @@ export default function HomePage() {
     </>
   );
 }
-
-/*
-function applyFilter(movies, filters) {
-  const { sortBy } = filters;
-  let filteredMovies = movies;
-
-  // SORT BY
-  /*
-  if (sortBy === "featured") {
-    filteredMovies = orderBy(movies, ["sold"], ["desc"]);
-  }
-  if (sortBy === "newest") {
-    filteredProducts = orderBy(products, ["createdAt"], ["desc"]);
-  }
-  if (sortBy === "priceDesc") {
-    filteredProducts = orderBy(products, ["price"], ["desc"]);
-  }
-  if (sortBy === "priceAsc") {
-    filteredProducts = orderBy(products, ["price"], ["asc"]);
-  }
-  */
-
-// FILTER MOVIES
-/*
-if (filters.genre) {
-  filteredMovies = movies.filter((movie) =>
-    movie.genre_ids.includes(parseInt(filters.genre))
-  );
-}
-
-/*
-  if (filters.category !== "All") {
-    filteredProducts = products.filter(
-      (product) => product.category === filters.category
-    );
-  }
-  if (filters.priceRange) {
-    filteredProducts = products.filter((product) => {
-      if (filters.priceRange === "below") {
-        return product.price < 25;
-      }
-      if (filters.priceRange === "between") {
-        return product.price >= 25 && product.price <= 75;
-      }
-      return product.price > 75;
-    });
-  }
-  
-  if (filters.searchQuery) {
-    filteredMovies = movies.filter((movie) =>
-      movie.original_title
-        .toLowerCase()
-        .includes(filters.searchQuery.toLowerCase())
-    );
-  }
-
-  return filteredMovies;
-}
-*/

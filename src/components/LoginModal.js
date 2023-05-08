@@ -5,6 +5,7 @@ import {
   TextField,
   Typography,
   Stack,
+  Alert,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -53,6 +54,7 @@ export default function LoginModal() {
 
   const classes = useStyles();
   const [passcode, setPasscode] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,7 +65,7 @@ export default function LoginModal() {
         navigate("/");
       });
     } else {
-      console.log("Wrong passcode");
+      setError("Wrong passcode");
     }
   };
 
@@ -104,6 +106,9 @@ export default function LoginModal() {
             Login
           </Button>
         </form>
+      </Box>
+      <Box sx={{}}>
+        <Alert severity="error">{error ? error : ""}</Alert>
       </Box>
     </>
   );

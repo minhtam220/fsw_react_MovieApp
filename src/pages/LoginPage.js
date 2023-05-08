@@ -38,7 +38,6 @@ function LoginPage() {
       console.log("Passcode required");
       window.localStorage.setItem("username", user["username"]);
       window.localStorage.setItem("imageUrl", user["imageUrl"]);
-      window.localStorage.setItem("list", []);
       navigate("/loginmodal");
     } else {
       console.log("No passcode required");
