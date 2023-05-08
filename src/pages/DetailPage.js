@@ -40,24 +40,28 @@ function DetailPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["detailMovie", params.id],
     queryFn: () => apiService.get(`/movie/${params.id}`),
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
+      console.log("before setMovie ");
+
       setMovie(data.data);
-
-      const savedMovies = JSON.parse(
-        window.localStorage.getItem("savedMovies")
-      );
-
-      const isObjectInArray = savedMovies.some(
-        (obj) => JSON.stringify(obj) === JSON.stringify(movie)
-      );
-
-      if (isObjectInArray) {
-        setIsSaved(true);
-      } else {
-        setIsSaved(false);
-      }
     },
   });
+
+  useEffect(() => {
+    // Perform side effect here
+    const savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
+
+    console.log("const savedMovies " + savedMovies);
+    const isObjectInArray = savedMovies.some(
+      (obj) => JSON.stringify(obj) === JSON.stringify(movie)
+    );
+
+    if (isObjectInArray) {
+      setIsSaved(true);
+    } else {
+      setIsSaved(false);
+    }
+  }, [movie]);
 
   //setMovie(detailMovieData);
 
@@ -66,22 +70,30 @@ function DetailPage() {
     //console.log(movie);
     //savedMovies.push(movie);
     //console.log(savedMovies);
+    //retrieve the current savedMovies from local storage as an array of objects
+    const savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
 
     if (!isSaved) {
-      //retrieve the current savedMovies from local storage as an array of objects
-      let savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
-
       //check if savedMovies is null, and initialize to an empty array if it is
       if (!savedMovies) {
         savedMovies = [];
       }
-
       //push the movie to it
       savedMovies.push(movie);
       //save the array as string in local storage
       window.localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
-
       setIsSaved(true);
+    } else {
+      //remove the movie from the list
+      const newSavedMovies = savedMovies.filter((item) => item.id !== movie.id);
+
+      //save the array as string in local storage
+      window.localStorage.setItem(
+        "savedMovies",
+        JSON.stringify(newSavedMovies)
+      );
+
+      setIsSaved(false);
     }
   };
 

@@ -376,15 +376,6 @@ export default function HomePage() {
                 )}
               </Box>
               <Box sx={{ position: "relative", height: 1 }}>
-                <Typography>
-                  Saved List:
-                  {JSON.parse(window.localStorage.getItem("savedMovies"))
-                    ? "OK" +
-                      JSON.parse(window.localStorage.getItem("savedMovies"))[0][
-                        "adult"
-                      ]
-                    : "NOT OK"}
-                </Typography>
                 <MovieList
                   listName={"Saved Movies"}
                   movies={JSON.parse(
