@@ -2,10 +2,13 @@ import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
+
+//pages
+import BrowsePage from "../pages/BrowsePage";
+import LoginPage from "../pages/LoginPage";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
-import LoginModal from "../components/LoginModal";
+import WatchLaterPage from "../pages/WatchLaterPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
 
@@ -28,8 +31,16 @@ function Router() {
           </AuthRequire>
         }
       />
+      <Route
+        path="/watchlater"
+        element={
+          <AuthRequire>
+            <WatchLaterPage />
+          </AuthRequire>
+        }
+      />
+      <Route path="/browse" element={<BrowsePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/loginmodal" element={<LoginModal />} />
       <Route path="/detail/:id" element={<DetailPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>

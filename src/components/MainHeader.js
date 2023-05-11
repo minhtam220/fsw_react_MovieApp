@@ -22,6 +22,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import { alpha, styled, CssBaseline, InputBase } from "@mui/material";
+import logoImg from "../logo.png";
+import { Avatar } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -133,7 +135,7 @@ function MainHeader({
               aria-label="menu"
               sx={{ mr: 2 }}
             >
-              <Logo sx={{ width: "10px" }} />
+              <Logo sx={{ width: "64px" }} />
             </IconButton>
           </Link>
         </Box>
@@ -148,7 +150,7 @@ function MainHeader({
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
+              gap: 4,
             }}
           >
             <Search>
@@ -170,6 +172,14 @@ function MainHeader({
           <Typography variant="h6" color="inherit" component="div">
             Welcome {user?.username}!
           </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <img
+            src={window.localStorage.getItem("imageUrl")}
+            alt="avatar"
+            width="64px"
+          />
         </Box>
 
         <Box sx={{ display: { xs: "none", sm: "block" } }}>

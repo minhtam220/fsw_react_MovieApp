@@ -1,30 +1,22 @@
-import { useEffect, useState } from "react";
 import {
-  Card,
-  Grid,
-  Container,
-  Typography,
-  Box,
-  Stack,
-  Rating,
-  Divider,
-  Breadcrumbs,
-  Link,
   Alert,
+  Box,
+  Breadcrumbs,
   Button,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  Link,
+  Typography,
 } from "@mui/material";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useQuery } from "react-query";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
 
 /*
 let savedMovies = localStorage.getItem("savedMovies")

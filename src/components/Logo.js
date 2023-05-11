@@ -4,8 +4,8 @@ import logoImg from "../logo.png";
 
 function Logo({ disabledLink = false, sx }) {
   const logo = (
-    <Box sx={{ ...sx }}>
-      <img src={logoImg} alt="logo" width="125vw" />
+    <Box>
+      <img src={logoImg} alt="logo" style={{ ...sx }} />
     </Box>
   );
 

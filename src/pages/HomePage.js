@@ -1,20 +1,11 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 //materials
-import {
-  Alert,
-  Box,
-  Container,
-  Stack,
-  Select,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Container, MenuItem, Select, Stack } from "@mui/material";
 //components
+import HeroSection from "../components/HeroSection";
+import LoadingScreen from "../components/LoadingScreen";
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
-import LoadingScreen from "../components/LoadingScreen";
-import HeroSection from "../components/HeroSection";
 import MoviePagination from "../components/MoviePagination";
 //api
 import apiService from "../app/apiService";
