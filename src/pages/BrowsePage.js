@@ -35,6 +35,8 @@ export default function BrowsePage() {
       navigate("/login");
     } else {
       console.log("No passcode required");
+      window.localStorage.setItem("username", user["username"]);
+      window.localStorage.setItem("imageUrl", user["imageUrl"]);
       auth.login(user["username"], () => {
         navigate("/");
       });

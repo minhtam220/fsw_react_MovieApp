@@ -1,29 +1,32 @@
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  Toolbar,
+  Typography,
+  alpha,
+  styled,
+} from "@mui/material";
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-
-import Logo from "./Logo";
-import useAuth from "../hooks/useAuth";
-import MovieSearch from "./MovieSearch";
-import { FTextField } from "../form";
-import { InputAdornment } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import MovieList from "../components/MovieList";
-import MovieFilter from "../components/MovieFilter";
-import Button from "@mui/material/Button";
-import { FormProvider } from "../form";
-import { useForm } from "react-hook-form";
-import Stack from "@mui/material/Stack";
-import { Link } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Container from "@mui/material/Container";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import Logo from "./Logo";
 
-import { alpha, styled, CssBaseline, InputBase } from "@mui/material";
-import logoImg from "../logo.png";
-import { Avatar } from "@mui/material";
+const pages = [
+  { name: "Home", url: "/home" },
+  { name: "Discover", url: "/discover" },
+  { name: "Watch Later", url: "/watchlater" },
+];
+const settings = ["Profile", "Log out"];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,23 +62,35 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: "12ch",
+      width: "10ch",
       "&:focus": {
-        width: "20ch",
+        width: "40ch",
       },
     },
   },
 }));
 
-function MainHeader({
-  searchInput,
-  handleSearchInputChange,
-  handleSearchInputSubmit,
-}) {
+export default function MainHeader({ searchInput, handleSearchInputChange }) {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   let navigate = useNavigate();
   let location = useLocation();
-
-  const { user } = useAuth();
 
   let auth = useAuth();
 
@@ -86,71 +101,86 @@ function MainHeader({
     });
   }
 
-  /*
-  const defaultValues = {
-    searchQuery: "",
-  };
-
-  const methods = useForm({
-    defaultValues,
-  });
-
-  const { watch, reset } = methods;
-  //const filters = watch();
-
-  //console.log(filters);
-
-  /*
-  const [search, setSearch] = useState("");
-
-  const handleChange = (event) => {
-    setSearch(event.target.value);
-  };
-  */
-
   return (
     <AppBar position="static">
-      <Toolbar
-        variant="dense"
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignContent: "center",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          <Link
-            to="/home"
-            style={{ textDecoration: "none", color: "white", m: "10px" }}
-          >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
-              edge="start"
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
               color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
             >
-              <Logo sx={{ width: "64px" }} />
+              <MenuIcon />
             </IconButton>
-          </Link>
-        </Box>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Link style={{ textDecoration: "none" }} to={page.url}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </Link>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
 
-        <Stack
-          spacing={2}
-          direction={{ xs: "column", sm: "row" }}
-          alignItems={{ sm: "center" }}
-          justifyContent="space-between"
-        >
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "flex", md: "flex", lg: "flex" },
+            }}
+          >
+            <Logo
+              sx={{
+                width: "64px",
+                mr: 1,
+              }}
+            ></Logo>
+          </Box>
+
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex", lg: "flex" },
+            }}
+          >
+            {pages.map((page) => (
+              <Button
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: 4,
+              flexGrow: 0,
             }}
           >
             <Search>
@@ -158,46 +188,54 @@ function MainHeader({
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Search by titles…"
                 inputProps={{ "aria-label": "search" }}
                 value={searchInput}
                 onChange={handleSearchInputChange}
-                onSubmit={handleSearchInputSubmit}
               />
             </Search>
           </Box>
-        </Stack>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Typography variant="h6" color="inherit" component="div">
-            Welcome {user?.username}!
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <img
-            src={window.localStorage.getItem("imageUrl")}
-            alt="avatar"
-            width="64px"
-          />
-        </Box>
-
-        <Box sx={{ display: { xs: "none", sm: "block" } }}>
-          {user ? (
-            <>
-              <Link>
-                <Button sx={{ color: "#fff" }} onClick={handleLogout}>
-                  Logout
-                </Button>
-              </Link>
-            </>
-          ) : (
-            ""
-          )}
-        </Box>
-      </Toolbar>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt="User Avatar"
+                  src={window.localStorage.getItem("imageUrl")}
+                  variant="square"
+                />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    onClick={handleLogout}
+                  >
+                    {setting}
+                  </Link>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 }
-
-export default MainHeader;
