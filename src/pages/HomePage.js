@@ -7,6 +7,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
 import MoviePagination from "../components/MoviePagination";
+import MainFooter from "../components/MainFooter";
 //api
 import apiService from "../app/apiService";
 //query
@@ -251,6 +252,7 @@ export default function HomePage() {
         sx={{
           display: "flex",
           minHeight: "100vh",
+          maxWidth: 1920,
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
@@ -366,18 +368,15 @@ export default function HomePage() {
                   </>
                 )}
               </Box>
-              <Box sx={{ position: "relative", height: 1 }}>
-                <MovieList
-                  listName={"Saved Movies"}
-                  movies={JSON.parse(
-                    window.localStorage.getItem("savedMovies")
-                  )}
-                />
-              </Box>
             </>
           )}
         </Stack>
       </Container>
+      <Stack>
+        <Box sx={{ maxWidth: 1920 }}>
+          <MainFooter />
+        </Box>
+      </Stack>
     </>
   );
 }
