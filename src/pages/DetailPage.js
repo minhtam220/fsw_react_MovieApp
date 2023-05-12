@@ -9,6 +9,7 @@ import {
   Grid,
   Link,
   Typography,
+  Stack,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -17,6 +18,8 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
+import MainHeader from "../components/MainHeader";
+import MainFooter from "../components/MainFooter";
 
 /*
 let savedMovies = localStorage.getItem("savedMovies")
@@ -24,7 +27,7 @@ let savedMovies = localStorage.getItem("savedMovies")
   : [];
   */
 
-function DetailPage() {
+export default function DetailPage() {
   const params = useParams();
   const [movie, setMovie] = useState("");
   const [isSaved, setIsSaved] = useState(false);
@@ -92,78 +95,85 @@ function DetailPage() {
   };
 
   return (
-    <Container sx={{ my: 3 }}>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
-        <Link underline="hover" color="inherit" component={RouterLink} to="/">
-          Home
-        </Link>
-        <Typography color="text.primary">{movie.original_title}</Typography>
-      </Breadcrumbs>
-      <Box sx={{ position: "relative", height: 1 }}>
-        {isLoading ? (
-          <LoadingScreen />
-        ) : (
-          <>
-            {error ? (
-              <Alert severity="error">{error}</Alert>
-            ) : (
-              <>
-                {movie && (
-                  <Card>
-                    <Grid container>
-                      <Grid item xs={12} md={6}>
-                        <Box p={2}>
-                          <Box
-                            sx={{
-                              borderRadius: 2,
-                              overflow: "hidden",
-                              display: "flex",
-                            }}
-                          >
+    <>
+      <Stack>
+        <Box sx={{ maxWidth: 1920 }}>
+          <MainHeader
+          //searchInput={searchInput}
+          //handleSearchInputChange={handleSearchInputChange}
+          />
+        </Box>
+      </Stack>
+      <Container sx={{ my: 3 }}>
+        <Box sx={{ position: "relative", height: 1 }}>
+          {isLoading ? (
+            <LoadingScreen />
+          ) : (
+            <>
+              {error ? (
+                <Alert severity="error">{error}</Alert>
+              ) : (
+                <>
+                  {movie && (
+                    <Card>
+                      <Grid container>
+                        <Grid item xs={12} md={6}>
+                          <Box p={2}>
                             <Box
-                              component="img"
                               sx={{
-                                width: 1,
-                                height: 1,
+                                borderRadius: 2,
+                                overflow: "hidden",
+                                display: "flex",
                               }}
-                              src={
-                                "https://image.tmdb.org/t/p/w500/" +
-                                movie.backdrop_path
-                              }
-                              alt="movie"
+                            >
+                              <Box
+                                component="img"
+                                sx={{
+                                  width: 1,
+                                  height: 1,
+                                }}
+                                src={
+                                  "https://image.tmdb.org/t/p/w500/" +
+                                  movie.backdrop_path
+                                }
+                                alt="movie"
+                              />
+                            </Box>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h5" paragraph>
+                            {movie.original_title}
+                          </Typography>
+                          <Divider sx={{ borderStyle: "dashed" }} />
+                          <Box>
+                            <ReactMarkdown
+                              rehypePlugins={[rehypeRaw]}
+                              children={movie.overview}
                             />
                           </Box>
-                        </Box>
+                        </Grid>
+                        {}
+                        <Button variant="contained" onClick={handleClick}>
+                          {isSaved ? "Remove from List" : "Add to List"}
+                        </Button>
                       </Grid>
-                      <Grid item xs={12} md={6}>
-                        <Typography variant="h5" paragraph>
-                          {movie.original_title}
-                        </Typography>
-                        <Divider sx={{ borderStyle: "dashed" }} />
-                        <Box>
-                          <ReactMarkdown
-                            rehypePlugins={[rehypeRaw]}
-                            children={movie.overview}
-                          />
-                        </Box>
-                      </Grid>
-                      {}
-                      <Button variant="contained" onClick={handleClick}>
-                        {isSaved ? "Remove from List" : "Add to List"}
-                      </Button>
-                    </Grid>
-                  </Card>
-                )}
-                {!movie && (
-                  <Typography variant="h6">404 Movie not found</Typography>
-                )}
-              </>
-            )}
-          </>
-        )}
-      </Box>
-    </Container>
+                    </Card>
+                  )}
+                  {!movie && (
+                    <Typography variant="h6">404 Movie not found</Typography>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </Box>
+      </Container>
+      <Stack>
+        <Box sx={{ maxWidth: 1920 }}>
+          <MainFooter />
+        </Box>
+      </Stack>
+    </>
   );
 }
-
-export default DetailPage;

@@ -114,6 +114,8 @@ export default function DiscoverPage() {
         sx={{
           display: "flex",
           minHeight: "100vh",
+          maxWidth: 1920,
+          mt: "1rem",
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
