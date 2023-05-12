@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { FMultiCheckbox, FRadioGroup } from "../form";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { FRadioGroup } from "../form";
 
 function MovieFilter({ genres, resetFilter }) {
   return (

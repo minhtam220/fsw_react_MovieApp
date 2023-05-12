@@ -2,9 +2,9 @@ import React from "react";
 //materials
 import { Box, Container, Stack } from "@mui/material";
 //components
+import MainFooter from "../components/MainFooter";
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
-import MainFooter from "../components/MainFooter";
 //api
 //query
 //routes

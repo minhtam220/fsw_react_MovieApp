@@ -1,13 +1,12 @@
-import * as React from "react";
+import { CardActionArea } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { CardActionArea, Stack, CardActions } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { makeStyles } from "@mui/styles";
+import * as React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   cardWrapper: {

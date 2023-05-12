@@ -1,5 +1,4 @@
-import { Pagination, Stack, Box } from "@mui/material";
-
+import { Box, Pagination, Stack } from "@mui/material";
 import * as React from "react";
 
 export default function MoviePagination({
