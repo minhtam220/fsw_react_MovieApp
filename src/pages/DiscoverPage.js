@@ -7,6 +7,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import MainHeader from "../components/MainHeader";
 import MovieList from "../components/MovieList";
 import MoviePagination from "../components/MoviePagination";
+import MainFooter from "../components/MainFooter";
 //api
 import apiService from "../app/apiService";
 //query
@@ -138,6 +139,7 @@ export default function DiscoverPage() {
           ) : (
             <>
               <Box sx={{ position: "relative", height: 1 }}>
+                Please select a genre{" "}
                 <Select
                   value={selectedGenre}
                   onChange={handleSelectedGenreChange}
@@ -176,6 +178,11 @@ export default function DiscoverPage() {
           )}
         </Stack>
       </Container>
+      <Stack>
+        <Box sx={{ maxWidth: 1920 }}>
+          <MainFooter />
+        </Box>
+      </Stack>
     </>
   );
 }
