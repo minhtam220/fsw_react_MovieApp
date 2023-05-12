@@ -243,8 +243,14 @@ export default function HomePage() {
         {searchInput ? (
           <></>
         ) : (
-          <Box sx={{ maxWidth: 1920 }}>
-            <HeroSection video={heroVideo} />
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "flex" },
+              maxWidth: 1920,
+            }}
+          >
+            <HeroSection sx={{ maxWidth: 1920 }} video={heroVideo} />
           </Box>
         )}
       </Stack>
@@ -253,6 +259,7 @@ export default function HomePage() {
           display: "flex",
           minHeight: "100vh",
           maxWidth: 1920,
+          mt: "1rem",
         }}
       >
         <Stack sx={{ flexGrow: 1 }}>
@@ -327,41 +334,6 @@ export default function HomePage() {
                         <MovieList
                           listName={"Popular"}
                           movies={popularMoviesData.data["results"].slice(0, 4)}
-                        />
-                      </>
-                    )}
-                  </>
-                )}
-              </Box>
-              <Box sx={{ position: "relative", height: 1 }}>
-                <Select
-                  value={selectedGenre}
-                  onChange={handleSelectedGenreChange}
-                >
-                  {genres.map((item, index) => (
-                    <MenuItem value={item.id}>{item.name}</MenuItem>
-                  ))}
-                </Select>
-                {discoverMoviesLoading ? (
-                  <LoadingScreen />
-                ) : (
-                  <>
-                    {discoverMoviesError ? (
-                      <Alert severity="error">{discoverMoviesError}</Alert>
-                    ) : (
-                      <>
-                        <MovieList
-                          listName={"All Movies" + selectedGenre}
-                          movies={discoverMoviesData.data["results"]}
-                        />
-                        <MoviePagination
-                          pageCount={
-                            discoverMoviesData
-                              ? discoverMoviesData.data["total_pages"]
-                              : 1
-                          }
-                          currentPage={currentPage}
-                          setCurrentPage={setCurrentPage}
                         />
                       </>
                     )}

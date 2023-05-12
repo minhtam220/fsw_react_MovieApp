@@ -103,7 +103,7 @@ export default function MainHeader({ searchInput, handleSearchInputChange }) {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container sx={{ maxWidth: "xl", minWidth: "xs" }}>
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -165,13 +165,15 @@ export default function MainHeader({ searchInput, handleSearchInputChange }) {
             }}
           >
             {pages.map((page) => (
-              <Button
-                key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.name}
-              </Button>
+              <Link style={{ textDecoration: "none" }} to={page.url}>
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
             ))}
           </Box>
 

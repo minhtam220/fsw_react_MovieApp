@@ -29,22 +29,24 @@ function DetailPage() {
   const [movie, setMovie] = useState("");
   const [isSaved, setIsSaved] = useState(false);
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: movieData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["detailMovie", params.id],
     queryFn: () => apiService.get(`/movie/${params.id}`),
-    onSuccess: (data) => {
-      console.log("before setMovie ");
-
-      setMovie(data.data);
+    onSuccess: (movieData) => {
+      //console.log("before setMovie ");
+      setMovie(movieData.data);
     },
   });
 
   useEffect(() => {
     // Perform side effect here
-    const savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
-
-    console.log("const savedMovies " + savedMovies);
-    const isObjectInArray = savedMovies.some(
+    let savedMovies = JSON.parse(window.localStorage.getItem("savedMovies"));
+    //console.log("const savedMovies " + savedMovies);
+    let isObjectInArray = savedMovies.some(
       (obj) => JSON.stringify(obj) === JSON.stringify(movie)
     );
 
